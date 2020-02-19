@@ -4,7 +4,7 @@
  * @version           : "1.0.0" 
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 18:54:38
- * @last modified     : 23/12/2019 21:42:22
+ * @last modified     : 19/02/2020 21:39:29
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -276,13 +276,17 @@ class html
      */
     public function fromJSON($json)
     {
-        $data = json_decode($json);
+        if(is_value($json)){
+            $data = json_decode($json);
 
-        if (json_last_error() === JSON_ERROR_NONE || json_last_error() === 0) {
-            $this->json = $data;
+            if (json_last_error() === JSON_ERROR_NONE || json_last_error() === 0) {
+                $this->json = $data;
+            }
+
+            unset($data);
+        }else{
+            $this->json = null;
         }
-
-        unset($data);
 
         return $this;
     }
