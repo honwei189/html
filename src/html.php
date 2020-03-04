@@ -1,10 +1,10 @@
 <?php
 /*
- * @description       : 
- * @version           : "1.0.0" 
+ * @description       :
+ * @version           : "1.0.1" 04/03/2020 11:00:08 added alter(), and enhanced build_from_json_render() - To support alter attributes from JSON
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 18:54:38
- * @last modified     : 19/02/2020 21:39:29
+ * @last modified     : 04/03/2020 11:13:38
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -15,7 +15,7 @@ use \honwei189\flayer as flayer;
 /**
  *
  * Generate HTML
- * 
+ *
  * Usage :
  *
  * html()->action($action)
@@ -43,20 +43,21 @@ use \honwei189\flayer as flayer;
  *  html()->label("First name")->param(["size" => 50, "maxlength" => 150])->attr("required")->text("user_first_name", $value),
  *  html()->label("Email address")->hidden(false)->attr("required")->email("user_email", $value)
  * ]);
- * 
+ *
  * @package     html
  * @subpackage
  * @author      Gordon Lim <honwei189@gmail.com>
  * @link        https://github.com/honwei189/html/
  * @link        https://appsw.dev
  * @link        https://justtest.app
- * @version     "1.0.0" 
- * @since       "1.0.0" 
+ * @version     "1.0.0"
+ * @since       "1.0.0"
  */
 class html
 {
     public $dataset             = [];
     public $parent_this         = null;
+    private $alter              = null;
     private $attr               = [];
     private $class              = [];
     private $data               = null;
@@ -276,7 +277,7 @@ class html
      */
     public function fromJSON($json)
     {
-        if(is_value($json)){
+        if (is_value($json)) {
             $data = json_decode($json);
 
             if (json_last_error() === JSON_ERROR_NONE || json_last_error() === 0) {
@@ -284,7 +285,7 @@ class html
             }
 
             unset($data);
-        }else{
+        } else {
             $this->json = null;
         }
 
@@ -345,7 +346,7 @@ class html
 
     /**
      * Return object only without directly output (echo / print)
-     * 
+     *
      * @param boolean $bool true = Do not directly output
      * @return html
      */
@@ -588,8 +589,9 @@ class html
         return $text;
     }
 
-    public function resources($type, $url){
-        
+    public function resources($type, $url)
+    {
+
     }
 
     /**
@@ -672,7 +674,36 @@ class html
      */
     private function build_from_json_render($attrs)
     {
-        $_ = $this->use($this);
+        $_            = $this->use($this);
+        $display_only = false;
+
+        if (isset($this->alter) && is_array($this->alter) && count($this->alter) > 0) {
+            foreach ($this->alter as $k => $v) {
+                if ($k == $attrs->name) {
+                    if (isset($v) && is_array($v) && count($v) > 0) {
+                        foreach ($v as $alter_k => $alter_v) {
+                            if ($alter_k == "value_only") {
+                                if ((bool) $alter_v) {
+                                    $display_only = true;
+                                    $_->value_only();
+                                }
+                            }
+
+                            if ($alter_k == "text") {
+                                $alter_v = $this->tpl_code_to_text($alter_v);
+                            }
+
+                            if (isset($attrs->$alter_k)) {
+                                $attrs->$alter_k = $alter_v;
+                            } else {
+                                $attrs->$alter_k = $alter_v;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
 
         if (isset($attrs->attr)) {
             $_->attr((array) $attrs->attr);
@@ -732,38 +763,40 @@ class html
             $_->value($attrs->value);
         }
 
-        if (isset($attrs->input)) {
-            $input = $attrs->input;
+        if (!$display_only) {
+            if (isset($attrs->input)) {
+                $input = $attrs->input;
 
-            if (isset($attrs->db_sql)) {
-                if (!flayer::exists("fdo")) {
-                    error("honwei189\\fdo is not loaded.", "example:<br><br>\$app = new honwei189\\flayer;<br>\$app->bind(\"honwei189\\fdo\\fdo\");
-                    <br>\$app->fdo()->connect(honwei189\config::get(\"database\", \"mysql\"));");
-                } else {
-                    $this->db = flayer::fdo();
+                if (isset($attrs->db_sql)) {
+                    if (!flayer::exists("fdo")) {
+                        error("honwei189\\fdo is not loaded.", "example:<br><br>\$app = new honwei189\\flayer;<br>\$app->bind(\"honwei189\\fdo\\fdo\");
+                        <br>\$app->fdo()->connect(honwei189\config::get(\"database\", \"mysql\"));");
+                    } else {
+                        $this->db = flayer::fdo();
 
-                    if (is_object($this->db)) {
-                        $_->data($this->db->query($attrs->db_sql));
+                        if (is_object($this->db)) {
+                            $_->data($this->db->query($attrs->db_sql));
+                        }
                     }
                 }
-            }
 
-            switch ($input) {
-                case "custom":
-                    $_->custom($attrs->name, (isset($attrs->default) ? $attrs->default : null), (array) $attrs->param);
-                    break;
+                switch ($input) {
+                    case "custom":
+                        $_->custom($attrs->name, (isset($attrs->default) ? $attrs->default : null), (array) $attrs->param);
+                        break;
 
-                case "select":
-                    $_->select($attrs->name, (isset($attrs->default) ? $attrs->default : null), $attrs->optional);
-                    break;
+                    case "select":
+                        $_->select($attrs->name, (isset($attrs->default) ? $attrs->default : null), $attrs->optional);
+                        break;
 
-                default:
-                    if (strpos($input, "_input_group") !== false) {
-                        $_->$input($attrs->name, (isset($attrs->default) ? $attrs->default : null), (isset($attrs->prepend->after) ? preg_replace("/<\/div>$/si", "", $attrs->prepend->after) : ""));
-                    } else {
-                        $_->$input($attrs->name, (isset($attrs->default) ? $attrs->default : null));
-                    }
-                    break;
+                    default:
+                        if (strpos($input, "_input_group") !== false) {
+                            $_->$input($attrs->name, (isset($attrs->default) ? $attrs->default : null), (isset($attrs->prepend->after) ? preg_replace("/<\/div>$/si", "", $attrs->prepend->after) : ""));
+                        } else {
+                            $_->$input($attrs->name, (isset($attrs->default) ? $attrs->default : null));
+                        }
+                        break;
+                }
             }
         }
     }
@@ -811,36 +844,36 @@ class html
                 if (strpos($this->param['class'], "form-control") !== false) {
                     $this->param['class'] = $this->param['class'];
                 } else {
-                    switch($obj){
+                    switch ($obj) {
                         case "button":
                         case "checkbox":
                         case "radio":
                         case "reset":
                         case "select":
                         case "submit":
-                        break;
+                            break;
 
                         default:
                             $this->param['class'] = "form-control " . $this->param['class'];
-                        break;
+                            break;
                     }
                 }
 
-                $this->param['class'] = trim(str_unique($this->param['class']));            }
+                $this->param['class'] = trim(str_unique($this->param['class']));}
         } else {
             if ($this->html_style == "bootstrap") {
-                switch($obj){
+                switch ($obj) {
                     case "button":
                     case "checkbox":
                     case "radio":
                     case "reset":
                     case "select":
                     case "submit":
-                    break;
+                        break;
 
                     default:
                         $this->param['class'] = "form-control";
-                    break;
+                        break;
                 }
             }
         }
@@ -1088,6 +1121,7 @@ class html
      */
     private function reset_element()
     {
+        $this->alter       = null;
         $this->attr        = [];
         $this->class       = [];
         $this->data        = null;
