@@ -1,6 +1,6 @@
 <?php
 /*
- * @description       :
+ * @description       : Dynamic generate HTML codes
  * @version           : "1.0.1" 04/03/2020 11:00:08 added alter(), and enhanced build_from_json_render() - To support alter attributes from JSON
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 18:54:38
@@ -121,6 +121,30 @@ class html
         $this->style_class        = null;
         $this->style_id           = null;
         $this->title              = null;
+    }
+
+    /**
+     * Alter configuration for fromJSON() & build_from_json()
+     * 
+     * Usage example :
+     * 
+     * $alter[TEXT_BOX_NAME] = [
+     *          "value_only" => true,
+     *          // "name" => "cat",
+     *          "text" => "{{ cat }}" //Load data from dataset with column name = cat
+     *      ];
+     *  }
+     *                  
+     *  $html->fromJSON($json)->alter($alter)->build();
+     *
+     * @param array $array
+     * @return html
+     */
+    public function alter($array)
+    {
+        $this->alter = $array;
+
+        return $this;
     }
 
     /**
