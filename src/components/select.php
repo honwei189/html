@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 19:05:09
- * @last modified     : 23/12/2019 21:36:29
+ * @last modified     : 05/03/2020 19:17:18
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -19,8 +19,8 @@ namespace honwei189\html;
  * @link        https://github.com/honwei189/html/
  * @link        https://appsw.dev
  * @link        https://justtest.app
- * @version     "1.0.0" 
- * @since       "1.0.0" 
+ * @version     "1.0.1" 05/03/2020 19:16:32 Rectified in value_only MODE, data not displayed problem
+ * @since       "1.0.0"
  */
 trait select
 {
@@ -89,6 +89,12 @@ trait select
             }
 
             $obj = "<select" . $this->build_obj_attr($name) . ">$data</select>";
+        } else {
+            if (isset($this->dataset[$name])) {
+                $obj = $this->dataset[$name];
+            } else {
+                $obj = $default_value;
+            }
         }
 
         return $this->output_as($this->build_render($name, $obj));
