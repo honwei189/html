@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 19:05:16
- * @last modified     : 23/12/2019 21:38:52
+ * @last modified     : 23/04/2020 15:17:36
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -170,6 +170,8 @@ trait view
             $options = $attrs;
         }
 
+        $url = $this->tpl_code_to_text($url, null);
+
         return $this->output_as($this->build_render("", "<img src=\"$url\"" . $options . " title=\"$title\" alt=\"$title\"".($width > 0 ? " width=\"$width\"" : "").">"));
     }
 
@@ -205,12 +207,13 @@ trait view
      * @param string $text
      * @return string
      */
-    public function text($text)
+    public function text($text, $type = null)
     {
         $this->object = __METHOD__;
+        $text = nl2br($this->value_format($this->tpl_code_to_text($text), $type));
 
         if ($this->html_style == "bootstrap") {
-            return $this->output_as($this->build_render("", $text));
+            return $this->output_as($this->build_render("", $this->div($text)));
         } else {
             echo $text;
         }

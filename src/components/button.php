@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 21/10/2019 16:45:38
- * @last modified     : 23/12/2019 21:33:44
+ * @last modified     : 22/04/2020 15:13:32
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -108,7 +108,7 @@ trait button
 
         // return "\n\t\t\t\t" . $this->div($btn . $ul, ["class" => "btn-group"]) . "\n\t\t\t\t";
 
-        $btn = "\n\t\t\t\t\t" . $this->button("", "\n\t\t\t\t\t\t" . $this->icon("fas fa-ellipsis-v fa-1x") . "\n\t\t\t\t\t", (array) $attrs) . PHP_EOL;
+        $btn = "\n\t\t\t\t\t" . $this->button("", "\n\t\t\t\t\t\t" . $this->icon("fa fa-ellipsis-v fa-1x") . "\n\t\t\t\t\t", (array) $attrs) . PHP_EOL;
         $ul  = "\t\t\t\t\t" . $this->ul($items, ["class" => "dropdown-menu$menu_pos"]) . "\n\t\t\t\t";
 
         return "\n\t\t\t\t" . $this->div($btn . $ul, ["class" => "btn-group"]) . "\n\t\t\t\t";

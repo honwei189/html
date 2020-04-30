@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 19:05:50
- * @last modified     : 23/12/2019 20:20:38
+ * @last modified     : 18/04/2020 16:49:28
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -19,8 +19,8 @@ namespace honwei189\html;
  * @link        https://github.com/honwei189/html/
  * @link        https://appsw.dev
  * @link        https://justtest.app
- * @version     "1.0.0" 
- * @since       "1.0.0" 
+ * @version     "1.0.0"
+ * @since       "1.0.0"
  */
 trait textbox
 {
@@ -43,11 +43,16 @@ trait textbox
         }
 
         if (!$this->display_value_only) {
-            $this->param['size']      = 5;
-            $this->param['maxlength'] = 15;
-            $this->param['min']       = "0.00";
-            $this->param['max']       = "1000000000.00";
-            $this->param['step']      = "0.01";
+            $this->param['size']      = (isset($this->param['size']) && is_value($this->param['size']) ? "{$this->param['size']}" : "5");
+            $this->param['maxlength'] = (isset($this->param['maxlength']) && is_value($this->param['maxlength']) ? "{$this->param['maxlength']}" : "15");
+            $this->param['min']       = (isset($this->attr['min']) && is_value($this->attr['min']) ? "{$this->attr['min']}" : "0.00");
+            $this->param['max']       = (isset($this->attr['max']) && is_value($this->attr['max']) ? "{$this->attr['max']}" : "1000000000.00");
+            $this->param['step']      = (isset($this->attr['step']) && is_value($this->attr['step']) ? "{$this->attr['step']}" : "0.01");
+
+            unset($this->attr['min']);
+            unset($this->attr['max']);
+            unset($this->attr['step']);
+
         }
 
         return $this->output_as($this->build_render($name, (!$this->display_value_only ? "<input type=\"number\"" . $this->build_obj_attr($name) . ">" : number_format((float) $this->param["value"], 2, ".", ","))));
@@ -209,11 +214,15 @@ trait textbox
         }
 
         if (!$this->display_value_only) {
-            $this->param['size']      = 5;
-            $this->param['maxlength'] = 15;
-            $this->param['min']       = "0";
-            $this->param['max']       = "1000000000";
-            $this->param['step']      = "1";
+            $this->param['size']      = (isset($this->param['size']) && is_value($this->param['size']) ? "{$this->param['size']}" : "5");
+            $this->param['maxlength'] = (isset($this->param['maxlength']) && is_value($this->param['maxlength']) ? "{$this->param['maxlength']}" : "15");
+            $this->param['min']       = (isset($this->attr['min']) && is_value($this->attr['min']) ? "{$this->attr['min']}" : "0");
+            $this->param['max']       = (isset($this->attr['max']) && is_value($this->attr['max']) ? "{$this->attr['max']}" : "1000000000");
+            $this->param['step']      = (isset($this->attr['step']) && is_value($this->attr['step']) ? "{$this->attr['step']}" : "1");
+
+            unset($this->attr['min']);
+            unset($this->attr['max']);
+            unset($this->attr['step']);
         }
 
         return $this->output_as($this->build_render($name, (!$this->display_value_only ? "<input type=\"number\"" . $this->build_obj_attr($name) . ">" : number_format((int) $this->param["value"], 2))));

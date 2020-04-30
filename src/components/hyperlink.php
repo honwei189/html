@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 18/10/2019 20:57:02
- * @last modified     : 23/12/2019 21:34:34
+ * @last modified     : 22/04/2020 15:13:03
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -135,28 +135,32 @@ trait hyperlink
      * @param array $attrs hyperlink attributes.  e.g:  class, id
      * @return string
      */
-    public function text_iconlink($url, $data_index, $name, $icon, $attrs = null)
+    public function text_iconlink($url, $data_index = null, $name, $icon, $attrs = null)
     {
         return $this->datalink(
             $url,
             $data_index,
-            $this->span(
-                $this->i("", [
-                    "class" => $icon,
-                    "title" => $name,
-                    "style" => "width: 20px !important;",
-                ]
-                ),
-                [
-                    "style" => "width: 20px !important; display:table-cell; vertical-align:middle;",
-                ]
-            ) .
-            $this->span(
-                $name,
-                [
-                    "style" => "display:table-cell; vertical-align:middle;",
-                ]
-            ),
+            $this->div(
+                $this->div(
+                    $this->i("", [
+                        "class" => $icon,
+                        "title" => $name,
+                        "style" => "width: 20px !important;",
+                    ]
+                    ),
+                    [
+                        // "style" => "width: 20px !important; display:table-cell; vertical-align:middle;",
+                        "style" => "width: 20% !important; float:left;"
+                    ]
+                ) .
+                $this->div(
+                    $name,
+                    [
+                        // "style" => "display:table-cell; vertical-align:middle;",
+                        "style" => "width: 80% !important;",
+                    ]
+                )
+            , ["class" => ""]),
             $attrs);
     }
 

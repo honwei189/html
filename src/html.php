@@ -4,13 +4,16 @@
  * @version           : "1.0.1" 04/03/2020 11:00:08 added alter(), and enhanced build_from_json_render() - To support alter attributes from JSON
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 18:54:38
- * @last modified     : 04/03/2020 11:13:38
+ * @last modified     : 23/04/2020 14:16:34
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
 namespace honwei189\html;
 
 use \honwei189\flayer as flayer;
+use \honwei189\crypto as crypto;
+
+use function honwei189\auto_date;
 
 /**
  *
@@ -1162,6 +1165,40 @@ class html
         $this->title       = null;
 
         return $this;
+    }
+
+    /**
+     * Return formatted string value
+     *
+     * @param string $string
+     * @param string $type Value type.  e.g: crypt, number, date
+     * @return string
+     */
+    public function value_format($string, $type = "")
+    {
+        switch ($type) {
+            case "currency":
+                $string = number_format($string, 0, ".", ",");
+                break;
+
+            case "crypt":
+                $string = crypto::d($string);
+                break;
+
+            case "date":
+                $string = auto_date($string);
+                break;
+
+            case "datetime":
+                $string = date("d/m/Y h:i a", strtotime($string));
+                break;
+
+            case "number":
+                $string = (int) $string;
+                break;
+        }
+
+        return $string;
     }
 }
 

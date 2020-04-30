@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 19:05:08
- * @last modified     : 23/12/2019 21:33:58
+ * @last modified     : 20/04/2020 16:41:53
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -19,8 +19,8 @@ namespace honwei189\html;
  * @link        https://github.com/honwei189/html/
  * @link        https://appsw.dev
  * @link        https://justtest.app
- * @version     "1.0.0" 
- * @since       "1.0.0" 
+ * @version     "1.0.0"
+ * @since       "1.0.0"
  */
 trait div
 {
@@ -44,6 +44,13 @@ trait div
             }
         } else {
             $options = $attrs;
+        }
+
+        if (is_callable($text)) {
+            ob_start();
+            echo $text();
+            $text = ob_get_contents();
+            ob_end_clean();
         }
 
         return "<div$options>$text</div>";
