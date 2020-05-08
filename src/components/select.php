@@ -17,8 +17,6 @@ namespace honwei189\html;
  * @subpackage
  * @author      Gordon Lim <honwei189@gmail.com>
  * @link        https://github.com/honwei189/html/
- * @link        https://appsw.dev
- * @link        https://justtest.app
  * @version     "1.0.1" 05/03/2020 19:16:32 Rectified in value_only MODE, data not displayed problem
  * @since       "1.0.0"
  */
