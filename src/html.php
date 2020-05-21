@@ -4,7 +4,7 @@
  * @version           : "1.0.1" 04/03/2020 11:00:08 added alter(), and enhanced build_from_json_render() - To support alter attributes from JSON
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 18:54:38
- * @last modified     : 23/04/2020 14:16:34
+ * @last modified     : 21/05/2020 17:09:57
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -667,10 +667,22 @@ class html
         return $this;
     }
 
+    /**
+     * Similar to custom().  Return html() objects.
+     * 
+     * example:
+     * 
+     * echo $html->with("div", "This is DIV");
+     * echo $html->with("textbox", "name", "Mr. A");
+     * 
+     * @param string $html_tag_name 
+     * @return html 
+     */
     public function with($html_tag_name)
     {
         $args = func_get_args();
-        $args = array_shift($args);
+        unset($args[0]);
+        $args = array_values($args);
 
         return call_user_func_array(array($this, $html_tag_name), $args);
     }
@@ -865,7 +877,7 @@ class html
         if (isset($this->param['class'])) {
             $this->param['class'] = implode(" ", array_unique(explode(" ", $this->param['class'])));
 
-            if ($this->html_style == "bootstrap") {
+            if ($this->html_style == "template") {
                 if (strpos($this->param['class'], "form-control") !== false) {
                     $this->param['class'] = $this->param['class'];
                 } else {
@@ -886,7 +898,7 @@ class html
 
                 $this->param['class'] = trim(str_unique($this->param['class']));}
         } else {
-            if ($this->html_style == "bootstrap") {
+            if ($this->html_style == "template") {
                 switch ($obj) {
                     case "button":
                     case "checkbox":
@@ -903,7 +915,7 @@ class html
             }
         }
 
-        // if ($this->html_style == "bootstrap") {
+        // if ($this->html_style == "template") {
         //     if (isset($this->param['class'])) {
         //         if (strpos($this->param['class'], "form-control") !== false) {
         //             $this->param['class'] = $this->param['class'];
@@ -1002,11 +1014,12 @@ class html
             }
         }
 
-        if ($this->html_style == "bootstrap") {
+        if ($this->html_style == "template") {
             $tpl = $this->html_template;
 
             if (!is_value($this->title)) {
                 $tpl = preg_replace("#<label.*?>([^<]+)</label>\n#", "", $tpl);
+                $tpl = str_replace("{{ title }}", "", $tpl);
             } else {
                 $tpl = str_replace("{{ title }}", $this->title, $tpl);
             }
@@ -1027,7 +1040,7 @@ class html
             if (is_value($this->style_class)) {
                 $tpl = str_replace("{{ style_class }}", $this->style_class, $tpl);
             } else {
-                $tpl = str_replace(" class=\"{{ style_class }}\"", "", $tpl);
+                $tpl = str_replace("{{ style_class }}", "", $tpl);
             }
 
             if (is_value($this->style_id)) {

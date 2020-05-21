@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 19:05:16
- * @last modified     : 23/04/2020 15:17:36
+ * @last modified     : 21/05/2020 16:50:54
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -38,7 +38,7 @@ trait view
             return $this;
         }
 
-        $this->html_style = "bootstrap";
+        $this->html_style = "template";
 
         switch ($form_layout) {
             case "horizontal":
@@ -174,6 +174,43 @@ trait view
     }
 
     /**
+     * Set custom layout
+     *
+     * Example :
+     *
+     * $html->form_layout("
+     *          <div id=\"{{ id }}\" class=\"form-group{{ style_class }}\">
+     *              <label for=\"{{ input_name }}\">{{ title }}</label>
+     *              {{ input }}
+     *          </div>
+     * ");
+     *
+     * Parameters code for custom layout (if you needed.  System will automatically apply it):
+     *
+     * {{ id }} This is to set your DIV ID.  This is get it from $html->style_id("my_id");
+     * {{ style_class }} This is to set your DIV additional class.  This is get it from $html->style_class("my_class");
+     * {{ input_name }} This is get it from $html->text("age");
+     *
+     * The following is required :-
+     *
+     * {{ title }} Input title.  This is get it from $html->title("Age")
+     * {{ input }} HTML object (input / select / textarea / div / span and etc..).  
+     *       This is get it from $html->title("Age")->text("age");
+     *       or;
+     *       $this is get it from $html->text($html->div("test"));
+     *
+     * @param mixed $html
+     * @return mixed
+     */
+    public function layout($html)
+    {
+        $this->html_style    = "template";
+        $this->html_template = $html;
+
+        return $this;
+    }
+
+    /**
      * Define parent DIV class
      *
      * @param string $class
@@ -210,7 +247,7 @@ trait view
         $this->object = __METHOD__;
         $text = nl2br($this->value_format($this->tpl_code_to_text($text), $type));
 
-        if ($this->html_style == "bootstrap") {
+        if ($this->html_style == "template") {
             return $this->output_as($this->build_render("", $this->div($text)));
         } else {
             echo $text;
