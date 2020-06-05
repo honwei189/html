@@ -4,16 +4,15 @@
  * @version           : "1.0.1" 04/03/2020 11:00:08 added alter(), and enhanced build_from_json_render() - To support alter attributes from JSON
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 18:54:38
- * @last modified     : 21/05/2020 17:09:57
+ * @last modified     : 05/06/2020 16:07:17
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
 namespace honwei189\html;
 
-use \honwei189\flayer as flayer;
-use \honwei189\crypto as crypto;
-
 use function honwei189\auto_date;
+use \honwei189\crypto as crypto;
+use \honwei189\flayer as flayer;
 
 /**
  *
@@ -126,16 +125,16 @@ class html
 
     /**
      * Alter configuration for fromJSON() & build_from_json()
-     * 
+     *
      * Usage example :
-     * 
+     *
      * $alter[TEXT_BOX_NAME] = [
      *          "value_only" => true,
      *          // "name" => "cat",
      *          "text" => "{{ cat }}" //Load data from dataset with column name = cat
      *      ];
      *  }
-     *                  
+     *
      *  $html->fromJSON($json)->alter($alter)->build();
      *
      * @param array $array
@@ -669,14 +668,14 @@ class html
 
     /**
      * Similar to custom().  Return html() objects.
-     * 
+     *
      * example:
-     * 
+     *
      * echo $html->with("div", "This is DIV");
      * echo $html->with("textbox", "name", "Mr. A");
-     * 
-     * @param string $html_tag_name 
-     * @return html 
+     *
+     * @param string $html_tag_name
+     * @return html
      */
     public function with($html_tag_name)
     {
@@ -731,9 +730,9 @@ class html
                             }
 
                             if (isset($attrs->$alter_k)) {
-                                $attrs->$alter_k = $alter_v;
+                                $attrs->$alter_k = $this->tpl_code_to_text($alter_v);
                             } else {
-                                $attrs->$alter_k = $alter_v;
+                                $attrs->$alter_k = $this->tpl_code_to_text($alter_v);
                             }
                         }
                     }

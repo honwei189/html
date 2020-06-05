@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 19:05:09
- * @last modified     : 05/03/2020 19:17:18
+ * @last modified     : 05/06/2020 16:04:28
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -73,7 +73,9 @@ trait select
                     $obj = $text . PHP_EOL;
                     break;
                 } else {
-                    $data .= "\t<option value=\"$value\"$default>$text</option>" . PHP_EOL;
+                    if (is_value($value)) {
+                        $data .= "\t<option value=\"$value\"$default>$text</option>" . PHP_EOL;
+                    }
                 }
             }
 
@@ -93,6 +95,23 @@ trait select
             } else {
                 $obj = $default_value;
             }
+
+            if (is_array($this->data) && count($this->data) > 0) {
+                foreach ($this->data as $k => $v) {
+                    if (is_array($v)) {
+                        $_ = array_values($v);
+
+                        if (trim($_[0]) == trim($obj)) {
+                            $obj = trim($_[1]);
+                        }
+                    } else {
+                        if (trim($k) == trim($obj)) {
+                            $obj = trim($v);
+                        }
+                    }
+                }
+            }
+
         }
 
         return $this->output_as($this->build_render($name, $obj));
