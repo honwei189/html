@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 19:05:09
- * @last modified     : 05/06/2020 16:04:28
+ * @last modified     : 15/06/2020 19:49:00
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -27,6 +27,7 @@ trait select
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param boolean $optional_option True = auto generate <option></option>
      * @return string
      */
     public function select($name, $default_value = "", $optional_option = false)
@@ -123,14 +124,15 @@ trait select
      * @param string $name Name of <input>
      * @param string $value Default value
      * @param string $icon_html Example:  $html->span($html->icon("fas fa-map-marked-alt")." Pick location", ["class"=>"input-group-addon getmap", "role"=>"button"])
+     * @param boolean $optional_option True = auto generate <option></option>
      * @return string
      */
-    public function select_input_group($name = "", $value = "", $icon_html = "")
+    public function select_input_group($name = "", $value = "", $icon_html = "", $optional_option = false)
     {
         $this->object            = __METHOD__;
         $this->prepend['before'] = "<div class=\"input-group\">";
         $this->prepend['after']  = "$icon_html</div>";
 
-        return $this->output_as($this->select($name, $value));
+        return $this->output_as($this->select($name, $value, $optional_option));
     }
 }
