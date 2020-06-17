@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 19:05:09
- * @last modified     : 15/06/2020 19:49:00
+ * @last modified     : 17/06/2020 19:02:57
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -33,11 +33,12 @@ trait select
     public function select($name, $default_value = "", $optional_option = false)
     {
         $this->object = __METHOD__;
-        $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
-        $data         = PHP_EOL;
-        $text         = "";
-        $value        = "";
-        $obj          = "";
+        $data  = PHP_EOL;
+        $text  = "";
+        $value = "";
+        $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+        $obj   = "";
+        $a_obj = null;
 
         if (is_array($this->data) && count($this->data) > 0) {
             $keys = [];
@@ -50,8 +51,13 @@ trait select
                     $value = $v[$keys[0]];
                     $text  = $v[$keys[1]];
                 } else {
-                    $value = $k;
-                    $text  = $v;
+                    if (is_value($v)) {
+                        $value = $k;
+                        $text  = $v;
+                    } else {
+                        $value = "";
+                        $text  = "";
+                    }
                 }
 
                 if (isset($this->dataset[$_name]) && $this->dataset[$_name] == $value) {
@@ -67,6 +73,26 @@ trait select
                         $default = " selected";
                     } else {
                         $default = "";
+
+                        if (isset($this->dataset[$_name])) {
+                            if (is_array($this->dataset[$_name])) {
+                                $_ = $this->dataset[$_name];
+                            } else {
+                                $_ = json_decode($this->dataset[$_name], true);
+                            }
+                        } else {
+                            $_ = $default_value;
+                        }
+
+                        if (is_array($_)) {
+                            foreach ($_ as $v) {
+                                if ($v == $value) {
+                                    $default = " selected";
+                                }
+                            }
+                        }
+
+                        unset($_);
                     }
                 }
 
@@ -84,7 +110,6 @@ trait select
         }
 
         if (!$this->display_value_only) {
-
             if ($optional_option) {
                 $data = "<option></option>" . PHP_EOL . $data;
             }
@@ -98,6 +123,17 @@ trait select
             }
 
             if (is_array($this->data) && count($this->data) > 0) {
+
+                if (isset($this->dataset[$_name])) {
+                    if (is_array($this->dataset[$_name])) {
+                        $_v = $this->dataset[$_name];
+                    } else {
+                        $_v = json_decode($this->dataset[$_name], true);
+                    }
+                } else {
+                    $_v = $obj;
+                }
+
                 foreach ($this->data as $k => $v) {
                     if (is_array($v)) {
                         $_ = array_values($v);
@@ -105,17 +141,39 @@ trait select
                         if (trim($_[0]) == trim($obj)) {
                             $obj = trim($_[1]);
                         }
+
+                        if (is_array($_v)) {
+                            foreach ($_v as $val) {
+                                if ($val == $_[0]) {
+                                    $a_obj[] = trim($_[1]);
+                                }
+                            }
+                        }
                     } else {
                         if (trim($k) == trim($obj)) {
                             $obj = trim($v);
                         }
+
+                        if (is_array($_v)) {
+                            foreach ($_v as $val) {
+                                if ($val == $_[0]) {
+                                    $a_obj[] = trim($_[1]);
+                                }
+                            }
+                        }
                     }
                 }
-            }
 
+                unset($_v);
+            }
+        }
+
+        if (is_array($a_obj)) {
+            $obj = implode(", ", (is_value($obj) ? array_merge([$obj], $a_obj) : $a_obj));
         }
 
         return $this->output_as($this->build_render($name, $obj));
+
     }
 
     /**

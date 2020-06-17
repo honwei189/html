@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 19:05:50
- * @last modified     : 18/04/2020 16:49:28
+ * @last modified     : 17/06/2020 19:06:00
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -34,10 +34,14 @@ trait textbox
         $this->object = __METHOD__;
         $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
 
-        if (isset($this->dataset[$_name])) {
-            $this->param["value"] = $this->dataset[$_name];
+        if (!is_value($value)) {
+            if (isset($this->dataset[$_name])) {
+                $this->param["value"] = $this->dataset[$_name];
+            } else if (isset($this->param["value"])) {
+                $this->param["value"] = $this->tpl_code_to_text($value);
+            }
         } else {
-            $this->param["value"] = $value;
+            $this->param["value"] = $this->tpl_code_to_text($value);
         }
 
         if (!$this->display_value_only) {
@@ -88,10 +92,14 @@ trait textbox
         $this->object = __METHOD__;
         $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
 
-        if (isset($this->dataset[$_name])) {
-            $this->param["value"] = auto_date($this->dataset[$_name]);
+        if (!is_value($value)) {
+            if (isset($this->dataset[$_name])) {
+                $this->param["value"] = $this->dataset[$_name];
+            } else if (isset($this->param["value"])) {
+                $this->param["value"] = $this->tpl_code_to_text($value);
+            }
         } else {
-            $this->param["value"] = $value;
+            $this->param["value"] = $this->tpl_code_to_text($value);
         }
 
         if (!$this->display_value_only) {
@@ -130,10 +138,14 @@ trait textbox
         $this->object = __METHOD__;
 
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
-        if (isset($this->dataset[$_name])) {
-            $this->param["value"] = $this->dataset[$_name];
+        if (!is_value($value)) {
+            if (isset($this->dataset[$_name])) {
+                $this->param["value"] = $this->dataset[$_name];
+            } else if (isset($this->param["value"])) {
+                $this->param["value"] = $this->tpl_code_to_text($value);
+            }
         } else {
-            $this->param["value"] = $value;
+            $this->param["value"] = $this->tpl_code_to_text($value);
         }
 
         return $this->output_as($this->build_render($name, (!$this->display_value_only ? "<input type=\"email\"" . $this->build_obj_attr($name) . ">" : $this->param["value"])));
@@ -184,10 +196,14 @@ trait textbox
             $options = $attrs;
         }
 
-        if (isset($this->dataset[$_name])) {
-            $this->param["value"] = $this->dataset[$_name];
+        if (!is_value($value)) {
+            if (isset($this->dataset[$_name])) {
+                $this->param["value"] = $this->dataset[$_name];
+            } else if (isset($this->param["value"])) {
+                $this->param["value"] = $this->tpl_code_to_text($value);
+            }
         } else {
-            $this->param["value"] = $value;
+            $this->param["value"] = $this->tpl_code_to_text($value);
         }
 
         return $this->output_as($this->build_render($name, "<input type=\"hidden\"" . (is_value($name) ? " name=\"$name\"" : "") . " value=\"" . $this->param["value"] . "\"$options>"));
@@ -205,10 +221,14 @@ trait textbox
         $this->object = __METHOD__;
         $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
 
-        if (isset($this->dataset[$_name])) {
-            $this->param["value"] = $this->dataset[$_name];
+        if (!is_value($value)) {
+            if (isset($this->dataset[$_name])) {
+                $this->param["value"] = $this->dataset[$_name];
+            } else if (isset($this->param["value"])) {
+                $this->param["value"] = $this->tpl_code_to_text($value);
+            }
         } else {
-            $this->param["value"] = $value;
+            $this->param["value"] = $this->tpl_code_to_text($value);
         }
 
         if (!$this->display_value_only) {
@@ -258,10 +278,14 @@ trait textbox
         $this->object = __METHOD__;
         $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
 
-        if (isset($this->dataset[$_name])) {
-            $this->param["value"] = $this->dataset[$_name];
+        if (!is_value($value)) {
+            if (isset($this->dataset[$_name])) {
+                $this->param["value"] = $this->dataset[$_name];
+            } else if (isset($this->param["value"])) {
+                $this->param["value"] = $this->tpl_code_to_text($value);
+            }
         } else {
-            $this->param["value"] = $value;
+            $this->param["value"] = $this->tpl_code_to_text($value);
         }
 
         return $this->output_as($this->build_render($name, (!$this->display_value_only ? "<input type=\"password\"" . $this->build_obj_attr($name) . ">" : $this->param["value"])));
@@ -298,14 +322,15 @@ trait textbox
     {
         $this->object = __METHOD__;
         $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
-        $value        = "";
 
         if (!is_value($value)) {
             if (isset($this->dataset[$_name])) {
-                $value = $this->dataset[$_name];
+                $this->param["value"] = $this->dataset[$_name];
             } else if (isset($this->param["value"])) {
-                $value = $this->param["value"];
+                $this->param["value"] = $this->tpl_code_to_text($value);
             }
+        } else {
+            $this->param["value"] = $this->tpl_code_to_text($value);
         }
 
         return $this->output_as($this->build_render($name, (!$this->display_value_only ? "<textarea" . $this->build_obj_attr($name) . ">$value</textarea>" : nl2br($value))));
@@ -323,10 +348,14 @@ trait textbox
         $this->object = __METHOD__;
         $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
 
-        if (isset($this->dataset[$_name])) {
-            $this->param["value"] = $this->dataset[$_name];
+        if (!is_value($value)) {
+            if (isset($this->dataset[$_name])) {
+                $this->param["value"] = $this->dataset[$_name];
+            } else if (isset($this->param["value"])) {
+                $this->param["value"] = $this->tpl_code_to_text($value);
+            }
         } else {
-            $this->param["value"] = $value;
+            $this->param["value"] = $this->tpl_code_to_text($value);
         }
 
         return $this->output_as($this->build_render($name, (!$this->display_value_only ? "<input type=\"text\"" . $this->build_obj_attr($name) . ">" : $this->param["value"])));
@@ -350,10 +379,14 @@ trait textbox
         }
 
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
-        if (isset($this->dataset[$_name])) {
-            $this->param["value"] = $this->dataset[$_name];
+        if (!is_value($value)) {
+            if (isset($this->dataset[$_name])) {
+                $this->param["value"] = $this->dataset[$_name];
+            } else if (isset($this->param["value"])) {
+                $this->param["value"] = $this->tpl_code_to_text($value);
+            }
         } else {
-            $this->param["value"] = $value;
+            $this->param["value"] = $this->tpl_code_to_text($value);
         }
 
         return $this->output_as($this->build_render($name, (!$this->display_value_only ? "<input type=\"text\"" . $this->build_obj_attr($name) . ">" : $this->param["value"])));
