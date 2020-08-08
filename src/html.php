@@ -4,7 +4,7 @@
  * @version           : "1.0.1" 04/03/2020 11:00:08 added alter(), and enhanced build_from_json_render() - To support alter attributes from JSON
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 18:54:38
- * @last modified     : 05/06/2020 16:07:17
+ * @last modified     : 08/08/2020 12:05:56
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -591,22 +591,52 @@ class html
 
         preg_match_all("/\{\{(.*?)\}\}/si", $text, $reg);
         if (isset($reg[1]) && count($reg[1]) > 0) {
+            $_dataset = $this->dataset;
+
+            if (is_object($this->dataset)) {
+                $_dataset = (array) $this->dataset;
+            }
+
+            if (is_null($data_index)) {
+                $data_index = 0;
+            }
+
             foreach ($reg[1] as $k => $v) {
                 $v = trim($v);
-                if (isset($this->dataset[$data_index]) && is_object($this->dataset[$data_index])) {
+                if (isset($_dataset[$data_index]) && is_object($_dataset[$data_index])) {
+                    $this->dataset = (object) $this->dataset;
                     if (is_null($data_index)) {
                         $text = str_replace($reg[0][$k], $this->dataset->$v, $text);
                     } else {
-                        $text = str_replace($reg[0][$k], $this->dataset[$data_index]->$v, $text);
+
+                        if (is_object($this->dataset)) {
+                            $_dataset = (array) $this->dataset;
+                            $text     = str_replace($reg[0][$k], $_dataset[$data_index]->$v, $text);
+                            unset($_dataset);
+                        } else {
+                            $text = str_replace($reg[0][$k], $this->dataset[$data_index]->$v, $text);
+                        }
                     }
                 } else {
                     if (is_null($data_index)) {
                         $text = str_replace($reg[0][$k], (isset($this->dataset[$v]) ? $this->dataset[$v] : ""), $text);
                     } else {
-                        $text = str_replace($reg[0][$k], (isset($this->dataset[$data_index][$v]) ? $this->dataset[$data_index][$v] : ""), $text);
+                        $_dataset = $this->dataset;
+                        if (is_object($this->dataset)) {
+                            $_dataset = (array) $this->dataset;
+                        }
+
+                        if (is_object($_dataset[$data_index])) {
+                            $_dataset[$data_index] = (array) $_dataset[$data_index];
+                        }
+
+                        $text = str_replace($reg[0][$k], (isset($_dataset[$data_index][$v]) ? $_dataset[$data_index][$v] : ""), $text);
+                        unset($_dataset);
                     }
                 }
             }
+
+            unset($_dataset);
         }
 
         unset($reg);

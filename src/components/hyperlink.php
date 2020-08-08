@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 18/10/2019 20:57:02
- * @last modified     : 22/04/2020 15:13:03
+ * @last modified     : 08/08/2020 12:04:13
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -17,8 +17,8 @@ namespace honwei189\html;
  * @subpackage
  * @author      Gordon Lim <honwei189@gmail.com>
  * @link        https://github.com/honwei189/html/
- * @version     "1.0.0" 
- * @since       "1.0.0" 
+ * @version     "1.0.0"
+ * @since       "1.0.0"
  */
 trait hyperlink
 {
@@ -45,13 +45,22 @@ trait hyperlink
 
         $url = $this->tpl_code_to_text($url, $data_index);
 
-        if (is_object($this->dataset[$data_index])) {
-            $value = (is_value($this->dataset[$data_index]->$data_name) ? $this->dataset[$data_index]->$data_name : $data_name);
-        } else {
-            $value = (isset($this->dataset[$data_index][$data_name]) ? $this->dataset[$data_index][$data_name] : $data_name);
+        $_dataset = $this->dataset;
+
+        if (is_object($this->dataset)) {
+            $_dataset = (array) $this->dataset;
         }
 
-        $html->param($this->attrs);
+        if (is_object($_dataset[$data_index])) {
+            $value = (is_value($_dataset[$data_index]->$data_name) ? $_dataset[$data_index]->$data_name : $data_name);
+        } else {
+            $value = (isset($_dataset[$data_index][$data_name]) ? $this->dataset[$data_index][$data_name] : $data_name);
+        }
+
+        unset($_dataset);
+
+        // $html->param($this->attrs);
+        $html->param($attrs);
 
         return "<a href=\"$url\"" . $html->build_obj_attr() . ">" . $value . "</a>";
     }
@@ -148,7 +157,7 @@ trait hyperlink
                     ),
                     [
                         // "style" => "width: 20px !important; display:table-cell; vertical-align:middle;",
-                        "style" => "width: 20% !important; float:left;"
+                        "style" => "width: 20% !important; float:left;",
                     ]
                 ) .
                 $this->div(
@@ -158,7 +167,7 @@ trait hyperlink
                         "style" => "width: 80% !important;",
                     ]
                 )
-            , ["class" => ""]),
+                , ["class" => ""]),
             $attrs);
     }
 

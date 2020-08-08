@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 19:05:50
- * @last modified     : 17/06/2020 19:06:00
+ * @last modified     : 08/07/2020 21:26:01
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -29,16 +29,18 @@ trait textbox
      * @param string $value Default value
      * @return string
      */
-    public function currency($name = "", $value = "")
+    public function currency($name = "", $value = null)
     {
         $this->object = __METHOD__;
         $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
 
         if (!is_value($value)) {
-            if (isset($this->dataset[$_name])) {
-                $this->param["value"] = $this->dataset[$_name];
-            } else if (isset($this->param["value"])) {
-                $this->param["value"] = $this->tpl_code_to_text($value);
+            if (is_null($value)) {
+                if (isset($this->dataset[$_name])) {
+                    $this->param["value"] = $this->dataset[$_name];
+                } else if (isset($this->param["value"])) {
+                    $this->param["value"] = $this->tpl_code_to_text($value);
+                }
             }
         } else {
             $this->param["value"] = $this->tpl_code_to_text($value);
@@ -68,7 +70,7 @@ trait textbox
      * @param string $icon_attrs <input> attributes.  e.g:  class, id
      * @return string
      */
-    public function currency_input_group($name = "", $value = "", $icon_attrs = null)
+    public function currency_input_group($name = "", $value = null, $icon_attrs = null)
     {
         $this->object = __METHOD__;
 
@@ -87,16 +89,18 @@ trait textbox
      * @param string $value Default value
      * @return string
      */
-    public function date($name = "", $value = "")
+    public function date($name = "", $value = null)
     {
         $this->object = __METHOD__;
         $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
 
         if (!is_value($value)) {
-            if (isset($this->dataset[$_name])) {
-                $this->param["value"] = $this->dataset[$_name];
-            } else if (isset($this->param["value"])) {
-                $this->param["value"] = $this->tpl_code_to_text($value);
+            if (is_null($value)) {
+                if (isset($this->dataset[$_name])) {
+                    $this->param["value"] = $this->dataset[$_name];
+                } else if (isset($this->param["value"])) {
+                    $this->param["value"] = $this->tpl_code_to_text($value);
+                }
             }
         } else {
             $this->param["value"] = $this->tpl_code_to_text($value);
@@ -121,7 +125,7 @@ trait textbox
      * @param string $icon_attrs <input> attributes.  e.g:  class, id
      * @return string
      */
-    public function date_input_group($name = "", $value = "", $icon_attrs = null)
+    public function date_input_group($name = "", $value = null, $icon_attrs = null)
     {
         $this->object = __METHOD__;
 
@@ -133,16 +137,18 @@ trait textbox
         return $this->date($name, $value);
     }
 
-    public function email($name = "", $value = "")
+    public function email($name = "", $value = null)
     {
         $this->object = __METHOD__;
 
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
         if (!is_value($value)) {
-            if (isset($this->dataset[$_name])) {
-                $this->param["value"] = $this->dataset[$_name];
-            } else if (isset($this->param["value"])) {
-                $this->param["value"] = $this->tpl_code_to_text($value);
+            if (is_null($value)) {
+                if (isset($this->dataset[$_name])) {
+                    $this->param["value"] = $this->dataset[$_name];
+                } else if (isset($this->param["value"])) {
+                    $this->param["value"] = $this->tpl_code_to_text($value);
+                }
             }
         } else {
             $this->param["value"] = $this->tpl_code_to_text($value);
@@ -159,7 +165,7 @@ trait textbox
      * @param string $icon_attrs <input> attributes.  e.g:  class, id
      * @return string
      */
-    public function email_input_group($name = "", $value = "", $icon_attrs = null)
+    public function email_input_group($name = "", $value = null, $icon_attrs = null)
     {
         $this->object = __METHOD__;
 
@@ -179,7 +185,7 @@ trait textbox
      * @param string|array $attrs <input type="hidden"> attributes.  e.g:  class, id
      * @return string
      */
-    public function hidden($name = "", $value = "", $attrs = null)
+    public function hidden($name = "", $value = null, $attrs = null)
     {
         $this->object = __METHOD__;
         $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
@@ -197,10 +203,12 @@ trait textbox
         }
 
         if (!is_value($value)) {
-            if (isset($this->dataset[$_name])) {
-                $this->param["value"] = $this->dataset[$_name];
-            } else if (isset($this->param["value"])) {
-                $this->param["value"] = $this->tpl_code_to_text($value);
+            if (is_null($value)) {
+                if (isset($this->dataset[$_name])) {
+                    $this->param["value"] = $this->dataset[$_name];
+                } else if (isset($this->param["value"])) {
+                    $this->param["value"] = $this->tpl_code_to_text($value);
+                }
             }
         } else {
             $this->param["value"] = $this->tpl_code_to_text($value);
@@ -216,16 +224,18 @@ trait textbox
      * @param string $value Default value
      * @return string
      */
-    public function number($name = "", $value = "")
+    public function number($name = "", $value = null)
     {
         $this->object = __METHOD__;
         $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
 
         if (!is_value($value)) {
-            if (isset($this->dataset[$_name])) {
-                $this->param["value"] = $this->dataset[$_name];
-            } else if (isset($this->param["value"])) {
-                $this->param["value"] = $this->tpl_code_to_text($value);
+            if (is_null($value)) {
+                if (isset($this->dataset[$_name])) {
+                    $this->param["value"] = $this->dataset[$_name];
+                } else if (isset($this->param["value"])) {
+                    $this->param["value"] = $this->tpl_code_to_text($value);
+                }
             }
         } else {
             $this->param["value"] = $this->tpl_code_to_text($value);
@@ -254,7 +264,7 @@ trait textbox
      * @param string $icon_attrs <input> attributes.  e.g:  class, id
      * @return string
      */
-    public function number_input_group($name = "", $value = "", $icon_attrs = null)
+    public function number_input_group($name = "", $value = null, $icon_attrs = null)
     {
         $this->object = __METHOD__;
 
@@ -273,16 +283,18 @@ trait textbox
      * @param string $value Default value
      * @return string
      */
-    public function password($name = "", $value = "")
+    public function password($name = "", $value = null)
     {
         $this->object = __METHOD__;
         $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
 
         if (!is_value($value)) {
-            if (isset($this->dataset[$_name])) {
-                $this->param["value"] = $this->dataset[$_name];
-            } else if (isset($this->param["value"])) {
-                $this->param["value"] = $this->tpl_code_to_text($value);
+            if (is_null($value)) {
+                if (isset($this->dataset[$_name])) {
+                    $this->param["value"] = $this->dataset[$_name];
+                } else if (isset($this->param["value"])) {
+                    $this->param["value"] = $this->tpl_code_to_text($value);
+                }
             }
         } else {
             $this->param["value"] = $this->tpl_code_to_text($value);
@@ -299,7 +311,7 @@ trait textbox
      * @param string $icon_attrs <input> attributes.  e.g:  class, id
      * @return string
      */
-    public function password_input_group($name = "", $value = "", $icon_attrs = null)
+    public function password_input_group($name = "", $value = null, $icon_attrs = null)
     {
         $this->object = __METHOD__;
 
@@ -318,16 +330,18 @@ trait textbox
      * @param string $value Default value
      * @return string
      */
-    public function textarea($name = "", $value = "")
+    public function textarea($name = "", $value = null)
     {
         $this->object = __METHOD__;
         $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
 
         if (!is_value($value)) {
-            if (isset($this->dataset[$_name])) {
-                $this->param["value"] = $this->dataset[$_name];
-            } else if (isset($this->param["value"])) {
-                $this->param["value"] = $this->tpl_code_to_text($value);
+            if (is_null($value)) {
+                if (isset($this->dataset[$_name])) {
+                    $this->param["value"] = $this->dataset[$_name];
+                } else if (isset($this->param["value"])) {
+                    $this->param["value"] = $this->tpl_code_to_text($value);
+                }
             }
         } else {
             $this->param["value"] = $this->tpl_code_to_text($value);
@@ -343,16 +357,18 @@ trait textbox
      * @param string $value Default value
      * @return string
      */
-    public function textbox($name = "", $value = "")
+    public function textbox($name = "", $value = null)
     {
         $this->object = __METHOD__;
         $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
 
         if (!is_value($value)) {
-            if (isset($this->dataset[$_name])) {
-                $this->param["value"] = $this->dataset[$_name];
-            } else if (isset($this->param["value"])) {
-                $this->param["value"] = $this->tpl_code_to_text($value);
+            if (is_null($value)) {
+                if (isset($this->dataset[$_name])) {
+                    $this->param["value"] = $this->dataset[$_name];
+                } else if (isset($this->param["value"])) {
+                    $this->param["value"] = $this->tpl_code_to_text($value);
+                }
             }
         } else {
             $this->param["value"] = $this->tpl_code_to_text($value);
@@ -369,7 +385,7 @@ trait textbox
      * @param string $icon_html Example:  $html->span($html->icon("fas fa-map-marked-alt")." Pick location", ["class"=>"input-group-addon getmap", "role"=>"button"])
      * @return string
      */
-    public function textbox_input_group($name = "", $value = "", $icon_html = "")
+    public function textbox_input_group($name = "", $value = null, $icon_html = "")
     {
         $this->object = __METHOD__;
 
@@ -380,10 +396,12 @@ trait textbox
 
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
         if (!is_value($value)) {
-            if (isset($this->dataset[$_name])) {
-                $this->param["value"] = $this->dataset[$_name];
-            } else if (isset($this->param["value"])) {
-                $this->param["value"] = $this->tpl_code_to_text($value);
+            if (is_null($value)) {
+                if (isset($this->dataset[$_name])) {
+                    $this->param["value"] = $this->dataset[$_name];
+                } else if (isset($this->param["value"])) {
+                    $this->param["value"] = $this->tpl_code_to_text($value);
+                }
             }
         } else {
             $this->param["value"] = $this->tpl_code_to_text($value);
