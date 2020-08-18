@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 18/10/2019 20:57:02
- * @last modified     : 08/08/2020 12:04:13
+ * @last modified     : 15/08/2020 16:07:29
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -40,7 +40,7 @@ trait hyperlink
         }
 
         $data_index = (int) $data_index;
-        $html       = html();
+        $html       = new html;
         $html->param($attrs);
 
         $url = $this->tpl_code_to_text($url, $data_index);

@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 19:05:26
- * @last modified     : 24/12/2019 22:52:58
+ * @last modified     : 15/08/2020 16:08:39
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -638,6 +638,8 @@ class table extends html
         if ($action_name == "") {
             $action_name = get_class($col->data_name);
         }
+
+        $col->data_name = (object) $col->data_name;
 
         switch ($action_name) {
             case "link":

@@ -4,7 +4,7 @@
  * @version           : "1.0.1" 04/03/2020 11:00:08 added alter(), and enhanced build_from_json_render() - To support alter attributes from JSON
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 18:54:38
- * @last modified     : 08/08/2020 12:05:56
+ * @last modified     : 15/08/2020 16:06:58
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -200,6 +200,154 @@ class html
         }
     }
 
+    /**
+     * Build form element's attributes
+     *
+     * @param string $name Name of form element.  e.g:  $html->textbox("aaa");
+     * @return html
+     */
+    public function build_obj_attr($name = null)
+    {
+        $attrs  = [];
+        $class  = [];
+        $params = [];
+
+        $obj = str_replace("html::", "", $this->object);
+
+        if (isset($this->param['attr']) && is_value($this->preset->$obj->attr)) {
+            if (isset($this->preset->$obj->attr)) {
+                $this->param['attr'] = trim($this->preset->$obj->attr . " " . $this->param['attr']);
+            } else {
+                $this->param['attr'] = trim($this->param['attr']);
+            }
+
+        } else if (isset($this->preset->$obj->attr) && is_value($this->preset->$obj->attr)) {
+            $this->param['attr'] = trim($this->preset->$obj->attr);
+        }
+
+        if (isset($this->param['class']) && is_value($this->param['class'])) {
+            if (isset($this->preset->$obj->class)) {
+                $this->param['class'] = trim($this->preset->$obj->class . " " . $this->param['class']);
+            } else {
+                // $this->preset->$obj->class = null;
+                $this->param['class'] = trim($this->param['class']);
+            }
+        } else if (isset($this->preset->$obj->class) && is_value($this->preset->$obj->class)) {
+            $this->param['class'] = trim($this->preset->$obj->class);
+        }
+
+        if (isset($this->param['class'])) {
+            $this->param['class'] = implode(" ", array_unique(explode(" ", $this->param['class'])));
+
+            if ($this->html_style == "template") {
+                if (strpos($this->param['class'], "form-control") !== false) {
+                    $this->param['class'] = $this->param['class'];
+                } else {
+                    switch ($obj) {
+                        case "button":
+                        case "checkbox":
+                        case "radio":
+                        case "reset":
+                        case "select":
+                        case "submit":
+                            break;
+
+                        default:
+                            $this->param['class'] = "form-control " . $this->param['class'];
+                            break;
+                    }
+                }
+
+                $this->param['class'] = trim(str_unique($this->param['class']));}
+        } else {
+            if ($this->html_style == "template") {
+                switch ($obj) {
+                    case "button":
+                    case "checkbox":
+                    case "radio":
+                    case "reset":
+                    case "select":
+                    case "submit":
+                        break;
+
+                    default:
+                        $this->param['class'] = "form-control";
+                        break;
+                }
+            }
+        }
+
+        // if ($this->html_style == "template") {
+        //     if (isset($this->param['class'])) {
+        //         if (strpos($this->param['class'], "form-control") !== false) {
+        //             $this->param['class'] = $this->param['class'];
+        //         } else {
+        //             $this->param['class'] = "form-control " . $this->param['class'];
+        //         }
+        //     } else {
+        //         $this->param['class'] = "form-control";
+        //     }
+
+        //     $this->param['class'] = trim(str_unique($this->param['class']));
+        // }
+
+        if (is_array($this->attr) && count($this->attr) > 0) {
+            foreach ($this->attr as $k => $v) {
+                if (is_value($v)) {
+                    $attrs[] = " " . $v;
+                }
+            }
+        } else {
+            if (!is_array($this->attr) && is_value($this->attr)) {
+                $attrs[] = $this->attr;
+            }
+        }
+
+        if (is_array($this->class) && count($this->class) > 0) {
+            foreach ($this->class as $v) {
+                $class[] = "$v";
+            }
+
+            $class = join(" ", $class);
+        } else {
+            if (!is_array($this->class) && is_value($this->class)) {
+                $class = $this->class;
+            } else {
+                $class = "";
+            }
+        }
+
+        if (is_value($class)) {
+            if (isset($this->param['class'])) {
+                $this->param['class'] = "$class " . $this->param['class'];
+            } else {
+                $this->param['class'] = $class;
+            }
+
+            $class = "";
+        }
+
+        if (is_array($this->param) && count($this->param) > 0) {
+            foreach ($this->param as $k => $v) {
+                $params[] = " $k=\"$v\"";
+            }
+        } else {
+            if (!is_array($this->param) && is_value($this->param)) {
+                $params[] = $this->param;
+            }
+        }
+
+        // $this->attr  = null;
+        // $this->class = null;
+        // $this->param = null;
+
+        return
+        (is_string($name) && is_value($name) ? " name=\"$name\"" : "") . "" .
+        (\is_value($this->placeholder) ? " placeholder=\"" . $this->placeholder . "\"" : "") .
+        join("", $params) .
+        join("", $attrs);
+    }
+    
     /**
      * Set form element object's CSS class.  e.g:  <input type="text" class="abc">
      *
@@ -865,154 +1013,6 @@ class html
                 }
             }
         }
-    }
-
-    /**
-     * Build form element's attributes
-     *
-     * @param string $name Name of form element.  e.g:  $html->textbox("aaa");
-     * @return html
-     */
-    private function build_obj_attr($name = null)
-    {
-        $attrs  = [];
-        $class  = [];
-        $params = [];
-
-        $obj = str_replace("html::", "", $this->object);
-
-        if (isset($this->param['attr']) && is_value($this->preset->$obj->attr)) {
-            if (isset($this->preset->$obj->attr)) {
-                $this->param['attr'] = trim($this->preset->$obj->attr . " " . $this->param['attr']);
-            } else {
-                $this->param['attr'] = trim($this->param['attr']);
-            }
-
-        } else if (isset($this->preset->$obj->attr) && is_value($this->preset->$obj->attr)) {
-            $this->param['attr'] = trim($this->preset->$obj->attr);
-        }
-
-        if (isset($this->param['class']) && is_value($this->param['class'])) {
-            if (isset($this->preset->$obj->class)) {
-                $this->param['class'] = trim($this->preset->$obj->class . " " . $this->param['class']);
-            } else {
-                // $this->preset->$obj->class = null;
-                $this->param['class'] = trim($this->param['class']);
-            }
-        } else if (isset($this->preset->$obj->class) && is_value($this->preset->$obj->class)) {
-            $this->param['class'] = trim($this->preset->$obj->class);
-        }
-
-        if (isset($this->param['class'])) {
-            $this->param['class'] = implode(" ", array_unique(explode(" ", $this->param['class'])));
-
-            if ($this->html_style == "template") {
-                if (strpos($this->param['class'], "form-control") !== false) {
-                    $this->param['class'] = $this->param['class'];
-                } else {
-                    switch ($obj) {
-                        case "button":
-                        case "checkbox":
-                        case "radio":
-                        case "reset":
-                        case "select":
-                        case "submit":
-                            break;
-
-                        default:
-                            $this->param['class'] = "form-control " . $this->param['class'];
-                            break;
-                    }
-                }
-
-                $this->param['class'] = trim(str_unique($this->param['class']));}
-        } else {
-            if ($this->html_style == "template") {
-                switch ($obj) {
-                    case "button":
-                    case "checkbox":
-                    case "radio":
-                    case "reset":
-                    case "select":
-                    case "submit":
-                        break;
-
-                    default:
-                        $this->param['class'] = "form-control";
-                        break;
-                }
-            }
-        }
-
-        // if ($this->html_style == "template") {
-        //     if (isset($this->param['class'])) {
-        //         if (strpos($this->param['class'], "form-control") !== false) {
-        //             $this->param['class'] = $this->param['class'];
-        //         } else {
-        //             $this->param['class'] = "form-control " . $this->param['class'];
-        //         }
-        //     } else {
-        //         $this->param['class'] = "form-control";
-        //     }
-
-        //     $this->param['class'] = trim(str_unique($this->param['class']));
-        // }
-
-        if (is_array($this->attr) && count($this->attr) > 0) {
-            foreach ($this->attr as $k => $v) {
-                if (is_value($v)) {
-                    $attrs[] = " " . $v;
-                }
-            }
-        } else {
-            if (!is_array($this->attr) && is_value($this->attr)) {
-                $attrs[] = $this->attr;
-            }
-        }
-
-        if (is_array($this->class) && count($this->class) > 0) {
-            foreach ($this->class as $v) {
-                $class[] = "$v";
-            }
-
-            $class = join(" ", $class);
-        } else {
-            if (!is_array($this->class) && is_value($this->class)) {
-                $class = $this->class;
-            } else {
-                $class = "";
-            }
-        }
-
-        if (is_value($class)) {
-            if (isset($this->param['class'])) {
-                $this->param['class'] = "$class " . $this->param['class'];
-            } else {
-                $this->param['class'] = $class;
-            }
-
-            $class = "";
-        }
-
-        if (is_array($this->param) && count($this->param) > 0) {
-            foreach ($this->param as $k => $v) {
-                $params[] = " $k=\"$v\"";
-            }
-        } else {
-            if (!is_array($this->param) && is_value($this->param)) {
-                $params[] = $this->param;
-            }
-        }
-
-        // $this->attr  = null;
-        // $this->class = null;
-        // $this->param = null;
-
-        return
-        (is_string($name) && is_value($name) ? " name=\"$name\"" : "") . "" .
-        (\is_value($this->placeholder) ? " placeholder=\"" . $this->placeholder . "\"" : "") .
-        join("", $params) .
-        join("", $attrs);
     }
 
     /**
