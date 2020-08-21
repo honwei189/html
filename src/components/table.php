@@ -2,7 +2,7 @@
 /*
  * @creator           : Gordon Lim <honwei189@gmail.com>
  * @created           : 14/10/2019 19:05:26
- * @last modified     : 15/08/2020 16:08:39
+ * @last modified     : 21/08/2020 20:37:23
  * @last modified by  : Gordon Lim <honwei189@gmail.com>
  */
 
@@ -17,7 +17,7 @@ namespace honwei189\html;
  * @subpackage
  * @author      Gordon Lim <honwei189@gmail.com>
  * @link        https://github.com/honwei189/html/
- * @version     "1.0.1"
+ * @version     "1.0.2" Added new feature -- body().  To print out tbody TR only
  * @since       "1.0.1"
  */
 class table extends html
@@ -33,6 +33,7 @@ class table extends html
     private $table_class                     = "table";
     private $table_id                        = "";
     private $table_responsive                = false;
+    private $table_tbody_only                = false;
     private $table_height                    = 100;
     private $table_tr_class                  = null;
     private $table_tr_id                     = false;
@@ -56,6 +57,7 @@ class table extends html
         $this->table_class                     = "";
         $this->table_id                        = "";
         $this->table_responsive                = false;
+        $this->table_tbody_only                = false;
         $this->table_height                    = 100;
         $this->table_tr_class                  = false;
         $this->table_tr_id                     = false;
@@ -91,6 +93,21 @@ class table extends html
         $this->allow_table_over_width          = !$bool;
         $this->hide_over_width_col             = !$bool;
         $this->table_responsive                = !$bool;
+        return $this;
+    }
+
+    /**
+     * Set to print tbody only (without thead and tfoot)
+     *
+     * @param bool $bool
+     * @return table
+     */
+    public function body($bool = true)
+    {
+        $this->table_tbody_only       = $bool;
+        $this->allow_table_over_width = false;
+        $this->hide_over_width_col    = false;
+
         return $this;
     }
 
@@ -299,7 +316,9 @@ class table extends html
             $this->output("<div class=\"table-responsive\" style=\"overflow:auto !important; height: " . (is_numeric($this->table_height) ? $this->table_height . "%" : $this->table_height) . " !important;\">");
         }
 
-        $this->output("\n\t<table " . (is_value($this->table_id) ? "id=\"" . $this->table_id . "\" " : "") . "class=\"" . $this->table_class . "\" style=\"" . ($this->allow_table_over_width ? "width: auto !important; min-" : "") . "width: $width%;\" cellpadding=\"0\" cellspacing=\"0\">\n\t\t<colgroup>");
+        if (!$this->table_tbody_only) {
+            $this->output("\n\t<table " . (is_value($this->table_id) ? "id=\"" . $this->table_id . "\" " : "") . "class=\"" . $this->table_class . "\" style=\"" . ($this->allow_table_over_width ? "width: auto !important; min-" : "") . "width: $width%;\" cellpadding=\"0\" cellspacing=\"0\">\n\t\t<colgroup>");
+        }
 
         $total_width = 0;
         foreach ($this->cols as $v) {
@@ -351,7 +370,10 @@ class table extends html
                 if (isset($v->attr['type']) && $v->attr['type'] == "longtext") {
                     $hidden_cols[] = $v;
                 } else {
-                    $this->output("\n\t\t\t<col$attr>");
+                    if (!$this->table_tbody_only) {
+                        $this->output("\n\t\t\t<col$attr>");
+                    }
+
                     $displayed_cols[] = $v;
                 }
             } else {
@@ -359,28 +381,34 @@ class table extends html
             }
         }
 
-        $this->output("\n\t\t</colgroup>");
+        if (!$this->table_tbody_only) {
+            if (is_array($hidden_cols) && count($hidden_cols) > 0) {
+                $this->auto_typesetting_over_width_col = true;
+            }
 
-        $this->output("\n\t\t<thead>");
+            $this->output("\n\t\t</colgroup>");
 
-        $this->output("\n\t\t\t<tr>");
-        $total_width = 0;
-        foreach ($displayed_cols as $v) {
-            $attr = "";
-            if (is_array($v->attr)) {
-                foreach ($v->attr as $attr_k => $attr_v) {
-                    if ($attr_k != "width") {
-                        $attr .= " $attr_k=\"$attr_v\"";
+            $this->output("\n\t\t<thead>");
+
+            $this->output("\n\t\t\t<tr>");
+            $total_width = 0;
+            foreach ($displayed_cols as $v) {
+                $attr = "";
+                if (is_array($v->attr)) {
+                    foreach ($v->attr as $attr_k => $attr_v) {
+                        if ($attr_k != "width") {
+                            $attr .= " $attr_k=\"$attr_v\"";
+                        }
                     }
                 }
+                $this->output("\n\t\t\t\t<td$attr>" . $v->title . "</td>");
+
             }
-            $this->output("\n\t\t\t\t<td$attr>" . $v->title . "</td>");
+            $this->output("\n\t\t\t</tr>");
+            $this->output("\n\t\t</thead>");
 
+            $this->output("\n\t\t<tbody>");
         }
-        $this->output("\n\t\t\t</tr>");
-        $this->output("\n\t\t</thead>");
-
-        $this->output("\n\t\t<tbody>");
 
         $total_displayed_col = count($displayed_cols);
 
@@ -457,18 +485,21 @@ class table extends html
             }
         }
 
-        $this->output("\n\t\t</tbody>");
+        if (!$this->table_tbody_only) {
+            $this->output("\n\t\t</tbody>");
 
-        $this->output("\n\t</table>" . PHP_EOL);
+            $this->output("\n\t</table>" . PHP_EOL);
+        }
 
         if ($this->table_responsive) {
             $this->output("\n</div>" . PHP_EOL);
             // $this->div($output, ["class" => "table-responsive"]);
         }
 
-        $displayed_cols = null;
-        $hidden_cols    = null;
-        $this->dataset  = [];
+        $displayed_cols         = null;
+        $hidden_cols            = null;
+        $this->dataset          = [];
+        $this->table_tbody_only = false;
     }
 
     /**
