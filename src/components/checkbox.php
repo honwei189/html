@@ -1,9 +1,16 @@
 <?php
 /*
- * @creator           : Gordon Lim <honwei189@gmail.com>
- * @created           : 14/10/2019 19:05:08
- * @last modified     : 23/12/2019 21:32:57
- * @last modified by  : Gordon Lim <honwei189@gmail.com>
+ * Created       : 2019-10-14 07:05:08 pm
+ * Author        : Gordon Lim <honwei189@gmail.com>
+ * Last Modified : 2020-11-07 04:21:58 pm
+ * Modified By   : Gordon Lim
+ * ---------
+ * Changelog
+ *
+ * Date & time           By                    Version   Comments
+ * -------------------   -------------------   -------   ---------------------------------------------------------
+ * 2020-11-07 04:17 pm   Gordon Lim            1.0.1     Rectified bootstrap - input group icon not displayed problem
+ *
  */
 
 namespace honwei189\html;
@@ -17,8 +24,7 @@ namespace honwei189\html;
  * @subpackage
  * @author      Gordon Lim <honwei189@gmail.com>
  * @link        https://github.com/honwei189/html/
- * @version     "1.0.0" 
- * @since       "1.0.0" 
+ * @version     "1.0.1"
  */
 trait checkbox
 {
@@ -31,12 +37,18 @@ trait checkbox
      */
     public function checkbox($name, $default_value = "")
     {
-        $data         = PHP_EOL;
-        $default      = "";
-        $text         = "";
-        $value        = "";
-        $this->object = __METHOD__;
-        $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+        $data    = PHP_EOL;
+        $default = "";
+        $text    = "";
+        $value   = "";
+        $_name   = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+
+        if (is_value($this->object_type)) {
+            $this->object      = $this->object_type;
+            $this->object_type = null;
+        } else {
+            $this->object = __METHOD__;
+        }
 
         if (is_array($this->data) && count($this->data) > 0) {
             $keys = [];
@@ -98,13 +110,11 @@ trait checkbox
      */
     public function checkbox_input_group($name = "", $value = "", $icon_html = "")
     {
-        $this->object = __METHOD__;
-
         if (!$this->display_value_only) {
             $this->prepend['before'] = "<div class=\"input-group\">";
             $this->prepend['after']  = "$icon_html</div>";
         }
 
-        return $this->checkbox($name, $value);
+        return $this->set_object_type(__METHOD__)->checkbox($name, $value);
     }
 }

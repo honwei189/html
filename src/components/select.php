@@ -1,9 +1,17 @@
 <?php
 /*
- * @creator           : Gordon Lim <honwei189@gmail.com>
- * @created           : 14/10/2019 19:05:09
- * @last modified     : 17/06/2020 19:02:57
- * @last modified by  : Gordon Lim <honwei189@gmail.com>
+ * Created       : 2019-10-14 07:05:30 pm
+ * Author        : Gordon Lim <honwei189@gmail.com>
+ * Last Modified : 2020-11-07 04:21:49 pm
+ * Modified By   : Gordon Lim
+ * ---------
+ * Changelog
+ *
+ * Date & time           By                    Version   Comments
+ * -------------------   -------------------   -------   ---------------------------------------------------------
+ * 2020-11-07 04:19 pm   Gordon Lim            1.0.2     Rectified bootstrap - input group icon not displayed problem
+ * 2020-03-05 07:16 pm   Gordon Lim            1.0.1     Rectified in value_only MODE, data not displayed problem
+ *
  */
 
 namespace honwei189\html;
@@ -17,8 +25,8 @@ namespace honwei189\html;
  * @subpackage
  * @author      Gordon Lim <honwei189@gmail.com>
  * @link        https://github.com/honwei189/html/
- * @version     "1.0.1" 05/03/2020 19:16:32 Rectified in value_only MODE, data not displayed problem
- * @since       "1.0.0"
+ * @version     "1.0.2"
+ * @since       "1.0.1" Rectified in value_only MODE, data not displayed problem
  */
 trait select
 {
@@ -32,13 +40,19 @@ trait select
      */
     public function select($name, $default_value = "", $optional_option = false)
     {
-        $this->object = __METHOD__;
         $data  = PHP_EOL;
         $text  = "";
         $value = "";
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
         $obj   = "";
         $a_obj = null;
+
+        if (is_value($this->object_type)) {
+            $this->object      = $this->object_type;
+            $this->object_type = null;
+        } else {
+            $this->object = __METHOD__;
+        }
 
         if (is_array($this->data) && count($this->data) > 0) {
             $keys = [];
@@ -187,10 +201,9 @@ trait select
      */
     public function select_input_group($name = "", $value = "", $icon_html = "", $optional_option = false)
     {
-        $this->object            = __METHOD__;
         $this->prepend['before'] = "<div class=\"input-group\">";
         $this->prepend['after']  = "$icon_html</div>";
 
-        return $this->output_as($this->select($name, $value, $optional_option));
+        return $this->set_object_type(__METHOD__)->output_as($this->select($name, $value, $optional_option));
     }
 }

@@ -1,11 +1,18 @@
 <?php
 /*
- * @description       : Dynamic generate HTML codes
- * @version           : "1.0.1" 04/03/2020 11:00:08 added alter(), and enhanced build_from_json_render() - To support alter attributes from JSON
- * @creator           : Gordon Lim <honwei189@gmail.com>
- * @created           : 14/10/2019 18:54:38
- * @last modified     : 15/08/2020 16:06:58
- * @last modified by  : Gordon Lim <honwei189@gmail.com>
+ * Created       : 2019-10-14 06:54:38 pm
+ * Author        : Gordon Lim <honwei189@gmail.com>
+ * Last Modified : 2020-11-07 04:18:17 pm
+ * Modified By   : Gordon Lim
+ * ---------
+ * Changelog
+ *
+ * Date & time           By                    Version   Comments
+ * -------------------   -------------------   -------   ---------------------------------------------------------
+ * 2020-11-07 04:15 pm   Gordon Lim            1.0.2     Rectified bootstrap - input group icon not displayed problem
+ * 2020-03-04 11:00 am   Gordon Lim            1.0.1     added alter(), and enhanced build_from_json_render() - To support
+ *                                                       alter attributes from JSON
+ *
  */
 
 namespace honwei189\html;
@@ -16,7 +23,7 @@ use \honwei189\flayer as flayer;
 
 /**
  *
- * Generate HTML
+ * Dynamic generate HTML codes
  *
  * Usage :
  *
@@ -50,8 +57,7 @@ use \honwei189\flayer as flayer;
  * @subpackage
  * @author      Gordon Lim <honwei189@gmail.com>
  * @link        https://github.com/honwei189/html/
- * @version     "1.0.0"
- * @since       "1.0.0"
+ * @version     "1.0.2"
  */
 class html
 {
@@ -72,6 +78,7 @@ class html
     private $name               = null;
     private $object             = null;
     private $object_id          = null;
+    private $object_type        = null;
     private $output_type        = null;
     private $param              = [];
     private $placeholder        = null;
@@ -111,6 +118,7 @@ class html
         $this->name               = null;
         $this->object             = null;
         $this->object_id          = null;
+        $this->object_type        = null;
         $this->output_type        = null;
         $this->param              = [];
         $this->parent_this        = null;
@@ -347,7 +355,7 @@ class html
         join("", $params) .
         join("", $attrs);
     }
-    
+
     /**
      * Set form element object's CSS class.  e.g:  <input type="text" class="abc">
      *
@@ -473,7 +481,7 @@ class html
      * Label title of the form element.  e.g:  My Email Address
      *
      * @param string $label
-     * @return mixed
+     * @return html
      */
     public function label($label)
     {
@@ -496,7 +504,7 @@ class html
      * Max length of the form element.  e.g:  <input type="text" maxlength="20">
      *
      * @param integer $length
-     * @return mixed
+     * @return html
      */
     public function max($length)
     {
@@ -507,7 +515,7 @@ class html
      * Max length of the form element.  e.g:  <input type="text" maxlength="20">
      *
      * @param integer $length
-     * @return mixed
+     * @return html
      */
     public function maxlength($length)
     {
@@ -571,7 +579,7 @@ class html
      * Textbox's placeholder
      *
      * @param string $text
-     * @return mixed
+     * @return html
      */
     public function placeholder($text)
     {
@@ -585,7 +593,7 @@ class html
      *
      * @param string $before
      * @param string $end
-     * @return mixed
+     * @return html
      */
     public function prepend($before, $end = null)
     {
@@ -623,7 +631,7 @@ class html
      * Form element size.  e.g:  <input type="text" size="20">
      *
      * @param integer $length
-     * @return mixed
+     * @return html
      */
     public function size($length)
     {
@@ -1118,9 +1126,22 @@ class html
     }
 
     /**
+     * Set object type, to declare what the HTML object is.  This is used for *_input_group
+     *
+     * @param string $type
+     * @return html
+     */
+    private function set_object_type($type)
+    {
+        $this->object_type = $type;
+
+        return $this;
+    }
+
+    /**
      * Return as JSON, return as HTML INPUT ELEMENTS (e.g: <input type="text" name="abc"> ) or render / print the HTML INPUT ELEMENTS directly
      * @param mixed $obj
-     * @return mixed
+     * @return html
      */
     private function output_as($obj)
     {

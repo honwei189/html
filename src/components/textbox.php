@@ -1,11 +1,17 @@
 <?php
 /*
- * @creator           : Gordon Lim <honwei189@gmail.com>
- * @created           : 14/10/2019 19:05:50
- * @last modified     : 08/07/2020 21:26:01
- * @last modified by  : Gordon Lim <honwei189@gmail.com>
+ * Created       : 2019-10-14 07:05:50 pm
+ * Author        : Gordon Lim <honwei189@gmail.com>
+ * Last Modified : 2020-11-07 04:22:10 pm
+ * Modified By   : Gordon Lim
+ * ---------
+ * Changelog
+ *
+ * Date & time           By                    Version   Comments
+ * -------------------   -------------------   -------   ---------------------------------------------------------
+ * 2020-11-07 04:20 pm   Gordon Lim            1.0.1     Rectified bootstrap - input group icon not displayed problem
+ *
  */
-
 namespace honwei189\html;
 
 /**
@@ -17,8 +23,7 @@ namespace honwei189\html;
  * @subpackage
  * @author      Gordon Lim <honwei189@gmail.com>
  * @link        https://github.com/honwei189/html/
- * @version     "1.0.0"
- * @since       "1.0.0"
+ * @version     "1.0.1"
  */
 trait textbox
 {
@@ -31,8 +36,14 @@ trait textbox
      */
     public function currency($name = "", $value = null)
     {
-        $this->object = __METHOD__;
-        $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+        $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+
+        if (is_value($this->object_type)) {
+            $this->object      = $this->object_type;
+            $this->object_type = null;
+        } else {
+            $this->object = __METHOD__;
+        }
 
         if (!is_value($value)) {
             if (is_null($value)) {
@@ -72,14 +83,22 @@ trait textbox
      */
     public function currency_input_group($name = "", $value = null, $icon_attrs = null)
     {
-        $this->object = __METHOD__;
+        if (is_null($icon_attrs)) {
+            $icon_attrs['class'] = "input-group-addon";
+        } else {
+            if (isset($icon_attrs['class'])) {
+                $icon_attrs['class'] = $icon_attrs['class'] . " input-group-addon";
+            } else {
+                $icon_attrs['class'] = "input-group-addon";
+            }
+        }
 
         if (!$this->display_value_only) {
             $this->prepend['before'] = "<div class=\"input-group\">";
             $this->prepend['after']  = $this->span("<i class=\"fas fa-dollar-sign\"></i>", $icon_attrs) . "</div>";
         }
 
-        return $this->currency($name, $value);
+        return $this->set_object_type(__METHOD__)->currency($name, $value);
     }
 
     /**
@@ -91,8 +110,14 @@ trait textbox
      */
     public function date($name = "", $value = null)
     {
-        $this->object = __METHOD__;
-        $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+        $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+
+        if (is_value($this->object_type)) {
+            $this->object      = $this->object_type;
+            $this->object_type = null;
+        } else {
+            $this->object = __METHOD__;
+        }
 
         if (!is_value($value)) {
             if (is_null($value)) {
@@ -127,19 +152,32 @@ trait textbox
      */
     public function date_input_group($name = "", $value = null, $icon_attrs = null)
     {
-        $this->object = __METHOD__;
+        if (is_null($icon_attrs)) {
+            $icon_attrs['class'] = "input-group-addon";
+        } else {
+            if (isset($icon_attrs['class'])) {
+                $icon_attrs['class'] = $icon_attrs['class'] . " input-group-addon";
+            } else {
+                $icon_attrs['class'] = "input-group-addon";
+            }
+        }
 
         if (!$this->display_value_only) {
             $this->prepend['before'] = "<div class=\"input-group\">";
             $this->prepend['after']  = $this->span("<i class=\"fa fa-calendar\"></i>", $icon_attrs) . "</div>";
         }
 
-        return $this->date($name, $value);
+        return $this->set_object_type(__METHOD__)->date($name, $value);
     }
 
     public function email($name = "", $value = null)
     {
-        $this->object = __METHOD__;
+        if (is_value($this->object_type)) {
+            $this->object      = $this->object_type;
+            $this->object_type = null;
+        } else {
+            $this->object = __METHOD__;
+        }
 
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
         if (!is_value($value)) {
@@ -167,14 +205,22 @@ trait textbox
      */
     public function email_input_group($name = "", $value = null, $icon_attrs = null)
     {
-        $this->object = __METHOD__;
+        if (is_null($icon_attrs)) {
+            $icon_attrs['class'] = "input-group-addon";
+        } else {
+            if (isset($icon_attrs['class'])) {
+                $icon_attrs['class'] = $icon_attrs['class'] . " input-group-addon";
+            } else {
+                $icon_attrs['class'] = "input-group-addon";
+            }
+        }
 
         if (!$this->display_value_only) {
             $this->prepend['before'] = "<div class=\"input-group\">";
             $this->prepend['after']  = $this->span("<i class=\"fa fa-envelop\"></i>", $icon_attrs) . "</div>";
         }
 
-        return $this->date($name, $value);
+        return $this->set_object_type(__METHOD__)->date($name, $value);
     }
 
     /**
@@ -226,8 +272,14 @@ trait textbox
      */
     public function number($name = "", $value = null)
     {
-        $this->object = __METHOD__;
-        $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+        $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+
+        if (is_value($this->object_type)) {
+            $this->object      = $this->object_type;
+            $this->object_type = null;
+        } else {
+            $this->object = __METHOD__;
+        }
 
         if (!is_value($value)) {
             if (is_null($value)) {
@@ -266,14 +318,22 @@ trait textbox
      */
     public function number_input_group($name = "", $value = null, $icon_attrs = null)
     {
-        $this->object = __METHOD__;
+        if (is_null($icon_attrs)) {
+            $icon_attrs['class'] = "input-group-addon";
+        } else {
+            if (isset($icon_attrs['class'])) {
+                $icon_attrs['class'] = $icon_attrs['class'] . " input-group-addon";
+            } else {
+                $icon_attrs['class'] = "input-group-addon";
+            }
+        }
 
         if (!$this->display_value_only) {
             $this->prepend['before'] = "<div class=\"input-group\">";
             $this->prepend['after']  = $this->span("<i class=\"fas fa-sort-numeric-down\"></i>", $icon_attrs) . "</div>";
         }
 
-        return $this->number($name, $value);
+        return $this->set_object_type(__METHOD__)->number($name, $value);
     }
 
     /**
@@ -285,8 +345,14 @@ trait textbox
      */
     public function password($name = "", $value = null)
     {
-        $this->object = __METHOD__;
-        $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+        $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+
+        if (is_value($this->object_type)) {
+            $this->object      = $this->object_type;
+            $this->object_type = null;
+        } else {
+            $this->object = __METHOD__;
+        }
 
         if (!is_value($value)) {
             if (is_null($value)) {
@@ -313,14 +379,22 @@ trait textbox
      */
     public function password_input_group($name = "", $value = null, $icon_attrs = null)
     {
-        $this->object = __METHOD__;
+        if (is_null($icon_attrs)) {
+            $icon_attrs['class'] = "input-group-addon";
+        } else {
+            if (isset($icon_attrs['class'])) {
+                $icon_attrs['class'] = $icon_attrs['class'] . " input-group-addon";
+            } else {
+                $icon_attrs['class'] = "input-group-addon";
+            }
+        }
 
         if (!$this->display_value_only) {
             $this->prepend['before'] = "<div class=\"input-group\">";
             $this->prepend['after']  = $this->span("<i class=\"fas fa-key\"></i>", $icon_attrs) . "</div>";
         }
 
-        return $this->password($name, $value);
+        return $this->set_object_type(__METHOD__)->password($name, $value);
     }
 
     /**
@@ -332,8 +406,14 @@ trait textbox
      */
     public function textarea($name = "", $value = null)
     {
-        $this->object = __METHOD__;
-        $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+        $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+
+        if (is_value($this->object_type)) {
+            $this->object      = $this->object_type;
+            $this->object_type = null;
+        } else {
+            $this->object = __METHOD__;
+        }
 
         if (!is_value($value)) {
             if (is_null($value)) {
@@ -359,8 +439,14 @@ trait textbox
      */
     public function textbox($name = "", $value = null)
     {
-        $this->object = __METHOD__;
-        $_name        = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+        $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+
+        if (is_value($this->object_type)) {
+            $this->object      = $this->object_type;
+            $this->object_type = null;
+        } else {
+            $this->object = __METHOD__;
+        }
 
         if (!is_value($value)) {
             if (is_null($value)) {
@@ -387,8 +473,6 @@ trait textbox
      */
     public function textbox_input_group($name = "", $value = null, $icon_html = "")
     {
-        $this->object = __METHOD__;
-
         if (!$this->display_value_only) {
             $this->prepend['before'] = "<div class=\"input-group\">";
             $this->prepend['after']  = "$icon_html</div>";
@@ -407,6 +491,6 @@ trait textbox
             $this->param["value"] = $this->tpl_code_to_text($value);
         }
 
-        return $this->output_as($this->build_render($name, (!$this->display_value_only ? "<input type=\"text\"" . $this->build_obj_attr($name) . ">" : $this->param["value"])));
+        return $this->set_object_type(__METHOD__)->output_as($this->build_render($name, (!$this->display_value_only ? "<input type=\"text\"" . $this->build_obj_attr($name) . ">" : $this->param["value"])));
     }
 }
