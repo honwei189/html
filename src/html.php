@@ -597,8 +597,13 @@ class html
      */
     public function prepend($before, $end = null)
     {
+        if (is_object($before)) {
+            $this->prepend = (array) $before;
+            return $this;
+        }
+
         $this->prepend['before'] = $before;
-        $this->prepend['end']    = $end;
+        $this->prepend['after']  = $end;
 
         return $this;
     }
