@@ -1,0 +1,42 @@
+{
+    "name": "honwei189/html",
+    "description": "HTML collective for PHP",
+    "authors": [{
+        "name": "Gordon Lim",
+        "email": "honwei189@gmail.com"
+    }],
+    "require": {
+        "honwei189/flayer": "^1.0",
+        "honwei189/fdo": "^1.0",
+        "php": ">=7.3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "honwei189\\Html\\": "src/",
+            "honwei189\\Html\\Components\\": "src/Components/",
+            "honwei189\\Html\\Struct\\": "src/Struct/"
+        },
+        "files": [
+            "src/Html.php",
+            "src/helpers.php"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        },
+        "laravel": {
+            "providers": [
+                "honwei189\\Html\\HtmlServiceProvider"
+            ],
+            "aliases": {
+                "html": "honwei189\\Html"
+            }
+        },
+        "installer-paths": {
+            "./vendor/{$vendor}/honwei189/libs/{$name}": [
+                "honwei189/html"
+            ]
+        }
+    }
+}
