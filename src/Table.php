@@ -604,7 +604,7 @@ class Table extends Html
                 $_col->data_name = $return_func($data);
                 unset($return_func);
 
-                if (is_string($_col->data_name)) {
+                if (is_string($_col->data_name) || is_numeric($_col->data_name)) {
                     return $_col->data_name;
                 } else {
                     // return $this->col_obj_to_text($_col, $idx);
