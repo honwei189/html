@@ -35,7 +35,7 @@ class HtmlServiceProvider extends ServiceProvider
 
         $this->app->booting(function () {
             $loader = AliasLoader::getInstance();
-            $loader->alias('Html', Html::class);
+            $loader->alias('Html', \honwei189\Html::class);
         });
     }
 
@@ -47,7 +47,7 @@ class HtmlServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->singleton('Html', function () {
-            return new Html;
+            return new \honwei189\Html;
         });
     }
 

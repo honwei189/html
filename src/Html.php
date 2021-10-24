@@ -18,9 +18,9 @@
 namespace honwei189;
 
 use function honwei189\Flayer\auto_date;
-use honwei189\Html\Components;
-use honwei189\Flayer\Crypto as crypto;
 use honwei189\Flayer\Core as flayer;
+use honwei189\Flayer\Crypto as crypto;
+use honwei189\Html\Components;
 
 /**
  *
@@ -66,6 +66,7 @@ class Html
     public $parent_this         = null;
     private $alter              = null;
     private $attr               = [];
+    private $build              = false;
     private $class              = [];
     private $data               = null;
     private $db                 = null;

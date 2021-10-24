@@ -44,7 +44,7 @@ trait DivTrait
             $options = $attrs;
         }
 
-        if (is_callable($text)) {
+        if (!is_string($text) && is_callable($text)) {
             ob_start();
             echo $text();
             $text = ob_get_contents();
