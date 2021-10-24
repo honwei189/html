@@ -33,15 +33,20 @@ trait RadioTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Radio button attributes.  e.g:  class, id
      * @return string
      */
-    public function radio($name, $default_value = "")
+    public function radio($name, $default_value = "", $attrs = null)
     {
         $data    = PHP_EOL;
         $default = "";
         $text    = "";
         $value   = "";
         $_name   = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+
+        if (is_array($attrs)) {
+            $this->param($attrs);
+        }
 
         if (is_value($this->object_type)) {
             $this->object      = $this->object_type;
@@ -83,19 +88,19 @@ trait RadioTrait
 
                 if ($this->display_value_only) {
                     if ($default == " checked") {
-                        $data = $this->prepend['before'] . $text . $this->prepend['end'] . PHP_EOL;
+                        $data = $this->prepend['before'] . $text . ($this->prepend['after'] ?? "") . PHP_EOL;
                         break;
                     } else {
                         $data = "";
                     }
                 } else {
-                    $data .= $this->prepend['before'] . "\t<input type=\"radio\"" . $this->build_obj_attr($name) . " data-label=\"" . addslashes($text) . "\" value=\"$value\"$default> $text" . $this->prepend['end'] . PHP_EOL;
+                    $data .= $this->prepend['before'] . "\t<input type=\"radio\"" . $this->build_obj_attr($name) . " data-label=\"" . addslashes($text) . "\" value=\"$value\"$default> $text" . ($this->prepend['after'] ?? "") . PHP_EOL;
                 }
             }
 
             unset($keys);
         } else {
-            $data .= $this->prepend['before'] . "\t<input type=\"radio\"" . $this->build_obj_attr($name) . " data-label=\"" . addslashes($text) . "\" value=\"\"$default> $text" . $this->prepend['end'] . PHP_EOL;
+            $data .= $this->prepend['before'] . "\t<input type=\"radio\"" . $this->build_obj_attr($name) . " data-label=\"" . addslashes($text) . "\" value=\"\"$default> $text" . ($this->prepend['after'] ?? "") . PHP_EOL;
         }
 
         return $this->output_as($this->build_render($name, $data));
@@ -106,16 +111,17 @@ trait RadioTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Radio button attributes.  e.g:  class, id
      * @param string $icon_html Example:  $html->span($html->icon("fas fa-map-marked-alt")." Pick location", ["class"=>"input-group-addon getmap", "role"=>"button"])
      * @return string
      */
-    public function radio_input_group($name = "", $value = "", $icon_html = "")
+    public function radio_input_group($name = "", $value = "", $attrs = null, $icon_html = "")
     {
         if (!$this->display_value_only) {
             $this->prepend['before'] = "<div class=\"input-group\">";
             $this->prepend['after']  = "$icon_html</div>";
         }
 
-        return $this->set_object_type(__METHOD__)->radio($name, $value);
+        return $this->set_object_type(__METHOD__)->radio($name, $value, $attrs);
     }
 }

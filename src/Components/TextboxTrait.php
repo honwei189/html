@@ -32,11 +32,16 @@ trait TextboxTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Input box attributes.  e.g:  class, id
      * @return string
      */
-    public function currency($name = "", $value = null)
+    public function currency($name = "", $value = null, $attrs = null)
     {
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+
+        if (is_array($attrs)) {
+            $this->param($attrs);
+        }
 
         if (is_value($this->object_type)) {
             $this->object      = $this->object_type;
@@ -78,10 +83,11 @@ trait TextboxTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Input box attributes.  e.g:  class, id
      * @param string $icon_attrs <input> attributes.  e.g:  class, id
      * @return string
      */
-    public function currency_input_group($name = "", $value = null, $icon_attrs = null)
+    public function currency_input_group($name = "", $value = null, $attrs = null, $icon_attrs = null)
     {
         if (is_null($icon_attrs)) {
             $icon_attrs['class'] = "input-group-addon";
@@ -98,7 +104,7 @@ trait TextboxTrait
             $this->prepend['after']  = $this->span("<i class=\"fas fa-dollar-sign\"></i>", $icon_attrs) . "</div>";
         }
 
-        return $this->set_object_type(__METHOD__)->currency($name, $value);
+        return $this->set_object_type(__METHOD__)->currency($name, $value, $attrs);
     }
 
     /**
@@ -106,11 +112,16 @@ trait TextboxTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Input box attributes.  e.g:  class, id
      * @return string
      */
-    public function date($name = "", $value = null)
+    public function date($name = "", $value = null, $attrs = null)
     {
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+
+        if (is_array($attrs)) {
+            $this->param($attrs);
+        }
 
         if (is_value($this->object_type)) {
             $this->object      = $this->object_type;
@@ -147,10 +158,11 @@ trait TextboxTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Input box attributes.  e.g:  class, id
      * @param string $icon_attrs <input> attributes.  e.g:  class, id
      * @return string
      */
-    public function date_input_group($name = "", $value = null, $icon_attrs = null)
+    public function date_input_group($name = "", $value = null, $attrs = null, $icon_attrs = null)
     {
         if (is_null($icon_attrs)) {
             $icon_attrs['class'] = "input-group-addon";
@@ -167,16 +179,28 @@ trait TextboxTrait
             $this->prepend['after']  = $this->span("<i class=\"fa fa-calendar\"></i>", $icon_attrs) . "</div>";
         }
 
-        return $this->set_object_type(__METHOD__)->date($name, $value);
+        return $this->set_object_type(__METHOD__)->date($name, $value, $attrs);
     }
 
-    public function email($name = "", $value = null)
+    /**
+     * Render input textbox with type = email
+     *
+     * @param string $name Name of <input>
+     * @param string $value Default value
+     * @param array $attrs Input box attributes.  e.g:  class, id
+     * @return string
+     */
+    public function email($name = "", $value = null, $attrs = null)
     {
         if (is_value($this->object_type)) {
             $this->object      = $this->object_type;
             $this->object_type = null;
         } else {
             $this->object = __METHOD__;
+        }
+
+        if (is_array($attrs)) {
+            $this->param($attrs);
         }
 
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
@@ -200,10 +224,11 @@ trait TextboxTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Input box attributes.  e.g:  class, id
      * @param string $icon_attrs <input> attributes.  e.g:  class, id
      * @return string
      */
-    public function email_input_group($name = "", $value = null, $icon_attrs = null)
+    public function email_input_group($name = "", $value = null, $attrs = null, $icon_attrs = null)
     {
         if (is_null($icon_attrs)) {
             $icon_attrs['class'] = "input-group-addon";
@@ -220,7 +245,7 @@ trait TextboxTrait
             $this->prepend['after']  = $this->span("<i class=\"fa fa-envelop\"></i>", $icon_attrs) . "</div>";
         }
 
-        return $this->set_object_type(__METHOD__)->date($name, $value);
+        return $this->set_object_type(__METHOD__)->date($name, $value, $attrs);
     }
 
     /**
@@ -268,11 +293,16 @@ trait TextboxTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Input box attributes.  e.g:  class, id
      * @return string
      */
-    public function number($name = "", $value = null)
+    public function number($name = "", $value = null, $attrs = null)
     {
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+
+        if (is_array($attrs)) {
+            $this->param($attrs);
+        }
 
         if (is_value($this->object_type)) {
             $this->object      = $this->object_type;
@@ -313,10 +343,11 @@ trait TextboxTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Input box attributes.  e.g:  class, id
      * @param string $icon_attrs <input> attributes.  e.g:  class, id
      * @return string
      */
-    public function number_input_group($name = "", $value = null, $icon_attrs = null)
+    public function number_input_group($name = "", $value = null, $attrs = null, $icon_attrs = null)
     {
         if (is_null($icon_attrs)) {
             $icon_attrs['class'] = "input-group-addon";
@@ -333,7 +364,7 @@ trait TextboxTrait
             $this->prepend['after']  = $this->span("<i class=\"fas fa-sort-numeric-down\"></i>", $icon_attrs) . "</div>";
         }
 
-        return $this->set_object_type(__METHOD__)->number($name, $value);
+        return $this->set_object_type(__METHOD__)->number($name, $value, $attrs);
     }
 
     /**
@@ -341,11 +372,16 @@ trait TextboxTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Input box attributes.  e.g:  class, id
      * @return string
      */
-    public function password($name = "", $value = null)
+    public function password($name = "", $value = null, $attrs = null)
     {
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+
+        if (is_array($attrs)) {
+            $this->param($attrs);
+        }
 
         if (is_value($this->object_type)) {
             $this->object      = $this->object_type;
@@ -374,10 +410,11 @@ trait TextboxTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Input box attributes.  e.g:  class, id
      * @param string $icon_attrs <input> attributes.  e.g:  class, id
      * @return string
      */
-    public function password_input_group($name = "", $value = null, $icon_attrs = null)
+    public function password_input_group($name = "", $value = null, $attrs = null, $icon_attrs = null)
     {
         if (is_null($icon_attrs)) {
             $icon_attrs['class'] = "input-group-addon";
@@ -394,7 +431,7 @@ trait TextboxTrait
             $this->prepend['after']  = $this->span("<i class=\"fas fa-key\"></i>", $icon_attrs) . "</div>";
         }
 
-        return $this->set_object_type(__METHOD__)->password($name, $value);
+        return $this->set_object_type(__METHOD__)->password($name, $value, $attrs);
     }
 
     /**
@@ -402,11 +439,16 @@ trait TextboxTrait
      *
      * @param string $name Name of <textarea>
      * @param string $value Default value
+     * @param array $attrs Input box attributes.  e.g:  class, id
      * @return string
      */
-    public function textarea($name = "", $value = null)
+    public function textarea($name = "", $value = null, $attrs = null)
     {
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+
+        if (is_array($attrs)) {
+            $this->param($attrs);
+        }
 
         if (is_value($this->object_type)) {
             $this->object      = $this->object_type;
@@ -435,11 +477,16 @@ trait TextboxTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Input box attributes.  e.g:  class, id
      * @return string
      */
-    public function textbox($name = "", $value = null)
+    public function textbox($name = "", $value = null, $attrs = null)
     {
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
+
+        if (is_array($attrs)) {
+            $this->param($attrs);
+        }
 
         if (is_value($this->object_type)) {
             $this->object      = $this->object_type;
@@ -468,14 +515,19 @@ trait TextboxTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Input box attributes.  e.g:  class, id
      * @param string $icon_html Example:  $html->span($html->icon("fas fa-map-marked-alt")." Pick location", ["class"=>"input-group-addon getmap", "role"=>"button"])
      * @return string
      */
-    public function textbox_input_group($name = "", $value = null, $icon_html = "")
+    public function textbox_input_group($name = "", $value = null, $attrs = null, $icon_html = "")
     {
         if (!$this->display_value_only) {
             $this->prepend['before'] = "<div class=\"input-group\">";
             $this->prepend['after']  = "$icon_html</div>";
+        }
+
+        if (is_array($attrs)) {
+            $this->param($attrs);
         }
 
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);

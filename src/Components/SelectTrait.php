@@ -35,10 +35,11 @@ trait SelectTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Select attributes.  e.g:  class, id
      * @param boolean $optional_option True = auto generate <option></option>
      * @return string
      */
-    public function select($name, $default_value = "", $optional_option = false)
+    public function select($name, $default_value = "", $attrs = null, $optional_option = false)
     {
         $data  = PHP_EOL;
         $text  = "";
@@ -46,6 +47,10 @@ trait SelectTrait
         $_name = preg_replace("#\[.*?\]|(\[\]+)#", "", $name);
         $obj   = "";
         $a_obj = null;
+
+        if (is_array($attrs)) {
+            $this->param($attrs);
+        }
 
         if (is_value($this->object_type)) {
             $this->object      = $this->object_type;
@@ -195,15 +200,16 @@ trait SelectTrait
      *
      * @param string $name Name of <input>
      * @param string $value Default value
+     * @param array $attrs Select attributes.  e.g:  class, id
      * @param string $icon_html Example:  $html->span($html->icon("fas fa-map-marked-alt")." Pick location", ["class"=>"input-group-addon getmap", "role"=>"button"])
      * @param boolean $optional_option True = auto generate <option></option>
      * @return string
      */
-    public function select_input_group($name = "", $value = "", $icon_html = "", $optional_option = false)
+    public function select_input_group($name = "", $value = "", $attrs = null, $icon_html = "", $optional_option = false)
     {
         $this->prepend['before'] = "<div class=\"input-group\">";
         $this->prepend['after']  = "$icon_html</div>";
 
-        return $this->set_object_type(__METHOD__)->output_as($this->select($name, $value, $optional_option));
+        return $this->set_object_type(__METHOD__)->output_as($this->select($name, $value, $attrs, $optional_option));
     }
 }
