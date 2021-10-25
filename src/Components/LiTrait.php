@@ -29,7 +29,7 @@ trait LiTrait
      * @param array $attrs <i> attributes.  e.g:  class, id
      * @return string
      */
-    public function li($text, $attrs = null)
+    public function li($text, array $attrs = null)
     {
         $options = "";
         if (is_array($attrs) && count($attrs) > 0) {
@@ -54,7 +54,7 @@ trait LiTrait
      * @param array $attrs <i> attributes.  e.g:  class, id
      * @return string
      */
-    public function ol($text, $attrs = null)
+    public function ol($text, array $attrs = null)
     {
         $options = "";
         if (is_array($attrs) && count($attrs) > 0) {
@@ -93,7 +93,7 @@ trait LiTrait
      * @param array $attrs <i> attributes.  e.g:  class, id
      * @return string
      */
-    public function ul($text, $attrs = null)
+    public function ul($text, array $attrs = null)
     {
         $options = "";
         if (is_array($attrs) && count($attrs) > 0) {

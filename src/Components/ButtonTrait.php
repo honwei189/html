@@ -30,7 +30,7 @@ trait ButtonTrait
      * @param array $attrs Button attributes.  e.g:  class, id
      * @return string
      */
-    public function button($name = "", $text = "", $attrs = null)
+    public function button($name = "", $text = "", array $attrs = null)
     {
         $this->object = __METHOD__;
         // $options = "";
@@ -66,10 +66,10 @@ trait ButtonTrait
      * @param string $name Name of Button
      * @param string $text Button text
      * @param string $icon Icon css class
-     * @param array $attrs hyperlink attributes.  e.g:  class, id
+     * @param array $attrs Button attributes.  e.g:  class, id
      * @return string
      */
-    public function Button_icon($name = "", $text = "", $icon, $attrs = null)
+    public function Button_icon($name = "", $text = "", $icon, array $attrs = null)
     {
         return $this->button($name, $this->icon($icon) . " " . $text, $attrs);
     }
@@ -86,7 +86,7 @@ trait ButtonTrait
      * @param array $attrs Button attributes.  e.g:  class, id
      * @return string
      */
-    public function button_menu($items, $attrs = null)
+    public function button_menu($items, array $attrs = null)
     {
         $this->object             = __METHOD__;
         $attrs                    = (object) $attrs;
@@ -120,7 +120,7 @@ trait ButtonTrait
      * @param array $attrs Button attributes.  e.g:  class, id
      * @return string
      */
-    public function submit_button($name = "", $text, $attrs = null)
+    public function submit_button($name = "", $text, array $attrs = null)
     {
         $this->object = __METHOD__;
         // $options = "";
@@ -156,10 +156,10 @@ trait ButtonTrait
      * @param string $name Name of button
      * @param string $text Button text
      * @param string $icon Icon css class
-     * @param array $attrs hyperlink attributes.  e.g:  class, id
+     * @param array $attrs Button attributes.  e.g:  class, id
      * @return string
      */
-    public function submit_button_icon($name = "", $text = "", $icon, $attrs = null)
+    public function submit_button_icon($name = "", $text = "", $icon, array $attrs = null)
     {
         return $this->submit_button($name, $this->icon($icon) . " " . $text, $attrs);
     }
@@ -172,7 +172,7 @@ trait ButtonTrait
      * @param array $attrs Button attributes.  e.g:  class, id
      * @return string
      */
-    public function reset_button($name = "", $text, $attrs = null)
+    public function reset_button($name = "", $text, array $attrs = null)
     {
         $this->object = __METHOD__;
         // $options = "";
@@ -208,10 +208,10 @@ trait ButtonTrait
      * @param string $name Name of button
      * @param string $text Button text
      * @param string $icon Icon css class
-     * @param array $attrs hyperlink attributes.  e.g:  class, id
+     * @param array $attrs Button attributes.  e.g:  class, id
      * @return string
      */
-    public function reset_button_icon($name = "", $text = "", $icon, $attrs = null)
+    public function reset_button_icon($name = "", $text = "", $icon, array $attrs = null)
     {
         return $this->reset_button($name, $this->icon($icon) . " " . $text, $attrs);
     }

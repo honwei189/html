@@ -34,7 +34,7 @@ trait HyperlinkTrait
      * @param array $attrs hyperlink attributes.  e.g:  class, id
      * @return string
      */
-    public function datalink($url, $data_index = null, $data_name = "", $attrs = null)
+    public function datalink($url, $data_index = null, $data_name = "", array $attrs = null)
     {
         if (is_array($attrs)) {
             foreach ($attrs as $k => $v) {
@@ -78,7 +78,7 @@ trait HyperlinkTrait
      * @param array $attrs hyperlink attributes.  e.g:  class, id
      * @return string
      */
-    public function iconlink($url, $data_index = null, $name, $icon, $attrs = null)
+    public function iconlink($url, $data_index = null, $name, $icon, array $attrs = null)
     {
         $options = "";
         if (is_array($attrs) && count($attrs) > 0) {
@@ -107,7 +107,7 @@ trait HyperlinkTrait
      * @param array $attrs hyperlink attributes.  e.g:  class, id
      * @return string
      */
-    public function round_iconlink($url, $data_index = null, $name, $icon, $attrs = null)
+    public function round_iconlink($url, $data_index = null, $name, $icon, array $attrs = null)
     {
         // $this->param($attrs);
         // return $this->link($url, "<i class=\"$icon\" title=\"$name\"></i>");
@@ -130,7 +130,7 @@ trait HyperlinkTrait
      * @param array $attrs hyperlink attributes.  e.g:  class, id
      * @return string
      */
-    public function textlink($url, $value, $attrs = null)
+    public function textlink($url, $value, array $attrs = null)
     {
         return $this->link($url, $value, $attrs);
     }
@@ -145,7 +145,7 @@ trait HyperlinkTrait
      * @param array $attrs hyperlink attributes.  e.g:  class, id
      * @return string
      */
-    public function text_iconlink($url, $data_index = null, $name, $icon, $attrs = null)
+    public function text_iconlink($url, $data_index = null, $name, $icon, array $attrs = null)
     {
         return $this->datalink(
             $url,
@@ -182,7 +182,7 @@ trait HyperlinkTrait
      * @param array $attrs hyperlink attributes.  e.g:  class, id
      * @return string
      */
-    public function link($url, $value, $attrs = null)
+    public function link($url, $value, array $attrs = null)
     {
         $options = "";
         if (is_array($attrs) && count($attrs) > 0) {
