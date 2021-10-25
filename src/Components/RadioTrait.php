@@ -34,9 +34,10 @@ trait RadioTrait
      * @param string $name Name of <input>
      * @param string $value Default value
      * @param array $attrs Radio button attributes.  e.g:  class, id
+     * @param array $radio_list Radio list.  ["A1" => "Menu A", "A2" => "Menu B"].  This is to replace using data()
      * @return string
      */
-    public function radio($name, $default_value = "", $attrs = null)
+    public function radio($name, $default_value = "", array $attrs = null, array $radio_list = null)
     {
         $data    = PHP_EOL;
         $default = "";
@@ -46,6 +47,10 @@ trait RadioTrait
 
         if (is_array($attrs)) {
             $this->param($attrs);
+        }
+
+        if (is_array($radio_list)) {
+            $this->data($radio_list);
         }
 
         if (is_value($this->object_type)) {
@@ -113,15 +118,16 @@ trait RadioTrait
      * @param string $value Default value
      * @param array $attrs Radio button attributes.  e.g:  class, id
      * @param string $icon_html Example:  $html->span($html->icon("fas fa-map-marked-alt")." Pick location", ["class"=>"input-group-addon getmap", "role"=>"button"])
+     * @param array $radio_list Radio list.  ["A1" => "Menu A", "A2" => "Menu B"].  This is to replace using data()
      * @return string
      */
-    public function radio_input_group($name = "", $value = "", $attrs = null, $icon_html = "")
+    public function radio_input_group($name = "", $value = "", array $attrs = null, $icon_html = "", array $radio_list = null)
     {
         if (!$this->display_value_only) {
             $this->prepend['before'] = "<div class=\"input-group\">";
             $this->prepend['after']  = "$icon_html</div>";
         }
 
-        return $this->set_object_type(__METHOD__)->radio($name, $value, $attrs);
+        return $this->set_object_type(__METHOD__)->radio($name, $value, $attrs, $radio_list);
     }
 }

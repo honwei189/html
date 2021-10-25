@@ -33,13 +33,23 @@ trait SelectTrait
     /**
      * Render drop down menu
      *
+     * e.g:
+     *
+     * $html->data(["M" => "Male", "F" => "Female"])->select("gender", "M", ["class" => "form-select"], null, true);
+     *
+     * or;
+     *
+     * $html->select("gender", "M", ["class" => "form-select"], ["M" => "Male", "F" => "Female"]);
+     *
+     *
      * @param string $name Name of <input>
      * @param string $value Default value
      * @param array $attrs Select attributes.  e.g:  class, id
+     * @param array $options_data <option></option> list.  ["A1" => "Menu A", "A2" => "Menu B"].  This is to replace using data()
      * @param boolean $optional_option True = auto generate <option></option>
      * @return string
      */
-    public function select($name, $default_value = "", $attrs = null, $optional_option = false)
+    public function select($name, $default_value = "", array $attrs = null, array $options_data = null, $optional_option = false)
     {
         $data  = PHP_EOL;
         $text  = "";
@@ -50,6 +60,10 @@ trait SelectTrait
 
         if (is_array($attrs)) {
             $this->param($attrs);
+        }
+
+        if (is_array($options_data)) {
+            $this->data($options_data);
         }
 
         if (is_value($this->object_type)) {
@@ -201,15 +215,16 @@ trait SelectTrait
      * @param string $name Name of <input>
      * @param string $value Default value
      * @param array $attrs Select attributes.  e.g:  class, id
+     * @param array $options_data <option></option> list.  ["A1" => "Menu A", "A2" => "Menu B"].  This is to replace using data()
      * @param string $icon_html Example:  $html->span($html->icon("fas fa-map-marked-alt")." Pick location", ["class"=>"input-group-addon getmap", "role"=>"button"])
      * @param boolean $optional_option True = auto generate <option></option>
      * @return string
      */
-    public function select_input_group($name = "", $value = "", $attrs = null, $icon_html = "", $optional_option = false)
+    public function select_input_group($name = "", $value = "", array $attrs = null, array $options_data = null, $icon_html = "", $optional_option = false)
     {
         $this->prepend['before'] = "<div class=\"input-group\">";
         $this->prepend['after']  = "$icon_html</div>";
 
-        return $this->set_object_type(__METHOD__)->output_as($this->select($name, $value, $attrs, $optional_option));
+        return $this->set_object_type(__METHOD__)->output_as($this->select($name, $value, $attrs, $options_data, $optional_option));
     }
 }
