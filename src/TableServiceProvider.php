@@ -35,7 +35,10 @@ class TableServiceProvider extends ServiceProvider
 
         $this->app->booting(function () {
             $loader = AliasLoader::getInstance();
-            $loader->alias('Table', Table::class);
+            // $loader->alias('Table', \honwei189\Html\Table::class);
+
+            $loader->alias(Table::class, 'table'); // Table has been loaded by Laravel, this method may wrong and may not be needed anymore
+            $loader->alias('tables', Tables::class); // Corret method and to register Tables to boot loader and create alias
         });
     }
 
@@ -46,9 +49,12 @@ class TableServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->singleton('Table', function () {
-            return new Table;
-        });
+        // $this->app->singleton('Table', function () {
+        //     return new \honwei189\Html\Table;
+        // });
+
+        $this->app->make('honwei189\Html\Table');
+        $this->app->make('honwei189\Html\Tables');
     }
 
     public function provides()

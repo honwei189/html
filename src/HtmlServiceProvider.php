@@ -1,10 +1,19 @@
 <?php
-/*
- * @creator           : Gordon Lim <honwei189@gmail.com>
- * @created           : 20/10/2019 20:24:21
- * @last modified     : 23/12/2019 21:42:52
- * @last modified by  : Gordon Lim <honwei189@gmail.com>
- */
+/**
+ * Description   : 
+ * ---------
+ * Created       : 2019-10-20 08:24:21 pm
+ * Author        : Gordon Lim
+ * Last Modified : 2021-10-25 09:31:46 pm
+ * Modified By   : Gordon Lim
+ * ---------
+ * Changelog
+ * 
+ * Date & time           By                    Version   Comments
+ * -------------------   -------------------   -------   ---------------------------------------------------------
+ * 
+*/
+
 namespace honwei189\Html;
 
 use Illuminate\Foundation\AliasLoader;
@@ -35,7 +44,10 @@ class HtmlServiceProvider extends ServiceProvider
 
         $this->app->booting(function () {
             $loader = AliasLoader::getInstance();
-            $loader->alias('Html', \honwei189\Html::class);
+            // $loader->alias('Html', \honwei189\Html::class);
+            
+            $loader->alias(Html::class, 'html'); // Html has been loaded by Laravel, this method may wrong and may not be needed anymore
+            $loader->alias('htmls', Htmls::class); // Corret method and to register Htmls to boot loader and create alias
         });
     }
 
@@ -46,9 +58,12 @@ class HtmlServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->singleton('Html', function () {
-            return new \honwei189\Html;
-        });
+        // $this->app->singleton('Html', function () {
+        //     return new \honwei189\Html;
+        // });
+
+        $this->app->make('honwei189\Html');
+        $this->app->make('honwei189\Html\Htmls');
     }
 
     public function provides()
