@@ -421,9 +421,15 @@ class Table extends Html
                 $attr = "";
                 if (is_array($col->attr)) {
                     foreach ($col->attr as $attr_k => $attr_v) {
-                        if ($attr_k != "width") {
+                        if ($attr_k == "class") {
+                            $attr .= " class=\"" . $this->tpl_code_to_text($attr_v, $k) . rtrim($this->table_td_class ? " " . $this->get_table_td_class($k) : "") . "\"";
+                        } else if ($attr_k != "width") {
                             $attr .= " $attr_k=\"" . $this->tpl_code_to_text($attr_v, $k) . "\"";
                         }
+                    }
+
+                    if (!isset($col->attr['class']) && !isset($col->attr['CLASS'])) {
+                        $attr .= " class=\"" . ($this->table_td_class ? $this->get_table_td_class($k) : "") . "\"";
                     }
                 }
 
@@ -463,7 +469,9 @@ class Table extends Html
                     $attr = " style=\"border-top: none;\"";
                     if (is_array($hidden_cols[$i]->attr)) {
                         foreach ($hidden_cols[$i]->attr as $attr_k => $attr_v) {
-                            if ($attr_k != "width") {
+                            if ($attr_k == "class") {
+                                $attr .= " class=\"" . $this->tpl_code_to_text($attr_v, $k) . rtrim($this->table_td_class ? " " . $this->get_table_td_class($k) : "") . "\"";
+                            } else if ($attr_k != "width") {
                                 if ($attr_k == "style") {
                                     $attr .= " $attr_k=\"border-top: none; $attr_v\"";
                                 } else {
@@ -525,9 +533,21 @@ class Table extends Html
     }
 
     /**
+     * To declare tbody's td class
+     *
+     * @param string|closure $class Class name or closure ( e.g: set_td_class(function($data){}); ) with predefined variable -- $data (this is from $table->dataset())
+     * @return table
+     */
+    public function set_td_class($class)
+    {
+        $this->table_td_class = $class;
+        return $this;
+    }
+
+    /**
      * To declare tbody's tr with class
      *
-     * @param string $css_class
+     * @param string|closure $css_class Class name or closure ( e.g: set_td_class(function($data){}); ) with predefined variable -- $data (this is from $table->dataset())
      * @return table
      */
     public function set_tr_class($css_class)
@@ -759,6 +779,22 @@ class Table extends Html
         }
 
         return $value;
+    }
+
+    /**
+     * Generate td's class
+     *
+     * @param integer $data_index   Row number (dataset index no.) of data from dataset
+     * @return string
+     */
+    private function get_table_td_class($data_index = 0)
+    {
+        if (is_callable($this->table_td_class)) {
+            $fn = $this->table_td_class;
+            return $fn($this->dataset[$data_index]);
+        } else if (is_value($this->table_td_class)) {
+            return $this->table_td_class;
+        }
     }
 
     /**
