@@ -577,7 +577,11 @@ class Html
                 if (isset($this->param[$k])) {
                     $this->param[$k] .= " $v";
                 } else {
-                    $this->param[$k] = $v;
+                    if (is_int($k)){
+                        $this->attr($v);
+                    }else{
+                        $this->param[$k] = $v;
+                    }
                 }
             }
         } else if (is_value($param)) {
