@@ -261,7 +261,14 @@ trait SelectTrait
      */
     public function time_menu($name, $minutes_steps = 0, $with_seconds = false, $default_value = "", $optional_option = false): ?string
     {
-        if ($this->object != "html::select_time_input_group") {
+        // if ($this->object != "html::time_menu_input_group") {
+        //     $this->object = __METHOD__;
+        // }
+
+        if (is_value($this->object_type)) {
+            $this->object      = $this->object_type;
+            $this->object_type = null;
+        } else {
             $this->object = __METHOD__;
         }
 
@@ -316,16 +323,22 @@ trait SelectTrait
             return sprintf("%02d", $data);
         }, range(0, 59));
 
-        $sec   = array_merge(["" => "Seconds"], $sec);
-        $attr  = $this->attr;
-        $class = $this->class;
+        $sec      = array_merge(["" => "Seconds"], $sec);
+        $attr     = $this->attr;
+        $class    = $this->class;
+        $arr_name = "";
 
-        $hr   = $this->set_object_type(__METHOD__)->data($hr)->select($name . "_hr", $hr_v, $optional_option);
-        $min  = $this->set_object_type(__METHOD__)->attr($attr)->class($class)->data($min)->select($name . "_min", $min_v, $optional_option);
-        $zone = $this->set_object_type(__METHOD__)->attr($attr)->class($class)->data($zone)->select($name . "_zone", $zone_v, $optional_option);
+        if (stripos($name, "[]") !== false) {
+            $name     = str_replace("[]", "", $name);
+            $arr_name = "[]";
+        }
+
+        $hr   = $this->set_object_type(__METHOD__)->data($hr)->select($name . "[hr]" . $arr_name, $hr_v, $optional_option);
+        $min  = $this->set_object_type(__METHOD__)->attr($attr)->class($class)->data($min)->select($name . "[min]" . $arr_name, $min_v, $optional_option);
+        $zone = $this->set_object_type(__METHOD__)->attr($attr)->class($class)->data($zone)->select($name . "[zone]" . $arr_name, $zone_v, $optional_option);
 
         if ($with_seconds) {
-            $sec = " " . $this->set_object_type(__METHOD__)->attr($attr)->class($class)->data($sec)->select($name . "_sec", $sec_v, $optional_option);
+            $sec = " " . $this->set_object_type(__METHOD__)->attr($attr)->class($class)->data($sec)->select($name . "[sec]" . $arr_name, $sec_v, $optional_option);
         } else {
             $sec = "";
         }
